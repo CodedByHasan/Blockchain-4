@@ -11,10 +11,10 @@
  - If you need to specify a port, use `$ PORT=80 npm start`
 
 ## Development
- 1. Pull the latest commits from master
+ 1. Pull the latest commits from `main`
  2. Checkout a branch
  3. Make local changes
  4. Commit
- 5. Pull and Merge
+ 5. Merge `main` into your branch
  6. Push
  7. Submit Pull Request for `main` branch
