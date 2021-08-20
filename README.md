@@ -6,6 +6,10 @@
  2. Checkout relevant branch
  3. To install packages and node server, run `$ npm i`
 
+# Running
+ - To run on the default port, use `$ npm start`
+ - If you need to specify a port, use `$ PORT=80 npm start`
+
 # Development
  1. Pull the latest commits from master
  2. Checkout a branch
