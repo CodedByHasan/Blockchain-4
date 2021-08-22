@@ -2,8 +2,8 @@
  Document Anchoring using Blockchain
 
 ## Cloning
- 1. Clone repository
- 2. Checkout relevant branch
+ 1. Clone repository `$ git clone https://github.com/CodedByHasan/Blockchain-4`
+ 2. Checkout relevant branch `$ git checkout <branch_name>`
  3. To install packages and node server, run `$ npm i`
 
 ## Running
@@ -12,9 +12,10 @@
 
 ## Development
  1. Pull the latest commits from `main`
- 2. Checkout a branch
+ 2. Checkout a new branch `$ git checkout -b <new_branch_name>`
  3. Make local changes
- 4. Commit
- 5. Merge `main` into your branch
- 6. Push
- 7. Submit Pull Request for `main` branch
+ 4. Commit `$ git add file1 file2 ...`, `$ git commit -m "<message>"`
+ 5. Merge `main` into your branch `$ git merge main`
+ 6. Push `$ git push`
+ 7. Submit Pull Request for `main` branch on github
+ 8. Another team member will review your pull request
