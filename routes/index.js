@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+const axios = require('axios');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -24,6 +25,42 @@ require("dotenv").config();
         myPrivateKey == null ) {
         throw new Error("Environment variables myAccountId and myPrivateKey must be present");
     }
+
+    console.log("Beginning test process");
+
+    axios.post('http://0.0.0.0:8080/v1/action',{
+        "payload": "abcdefg",
+        "submit": "direct"
+    })
+    .then((response) => {
+    console.log(response.statusText);
+    console.log(response.data.transactionId);
+    }, (error) => {
+    console.log(error);
+    });
+
+
+    axios.get('http://0.0.0.0:8080/v1/action/?payload=abcdefg',{
+    })
+    .then((response) => {
+    console.log(response.statusText);
+    console.log(response.data);
+    }, (error) => {
+    console.log("first get request error")
+    console.log(error);
+    });
+
+
+
+    axios.get('http://0.0.0.0:8080/v1/action/?payload=gibberish',{
+    })
+    .then((response) => {
+    console.log("second get request")
+    console.log(response);
+    }, (error) => {
+    console.log("second get request error")
+    console.log(error.statusText);
+    });
 
     // Create our connection to the Hedera network
     // The Hedera JS SDK makes this really easy!
@@ -70,6 +107,8 @@ require("dotenv").config();
         .execute(client);
 
     console.log("The account balance after the transfer is: " +getNewBalance.hbars.toTinybars() +" tinybar.")
+
+
 
 }
 main();
