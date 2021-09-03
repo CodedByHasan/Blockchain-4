@@ -9,6 +9,7 @@
 ## Running
  - To run on the default port, use `$ npm start`
  - If you need to specify a port, use `$ PORT=80 npm start`
+ - Enter your local ip and selected port from above as a URL in your browser. e.g. `http://10.0.0.5:80`
 
 ## Development
  1. Pull the latest commits from `main`
