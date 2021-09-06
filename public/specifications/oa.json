@@ -1,0 +1,123 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "Blockchain-4",
+        "description": "Document Anchoring using Blockchain",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "/api"
+        }
+    ],
+    "tags": [
+        {
+            "name": "Informational Operations",
+            "description": "Provides information about previously uploaded documents"
+        },
+        {
+            "name": "Anchoring Operations",
+            "description": "Provide methods for anchoring and verifing documents"
+        }
+    ],
+    "paths": {
+        "/list": {
+            "get": {
+                "summary": "List all anchored documents",
+                "description": "Used to get a list of all uploaded documents available for verification. Body may contain an empty array if no documents have been uploaded.",
+                "tags": ["Informational Operations"],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$id": "#/items",
+                                        "type": "object",
+                                        "required": [
+                                            "name",
+                                            "id"
+                                        ],
+                                        "properties": {
+                                            "name": {
+                                                "type": "string"
+                                            },
+                                            "id": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "additionalProperties": true
+                                    }
+                                },
+                                "examples": {
+                                    "empty": {
+                                        "summary": "No documents available",
+                                        "value": []
+                                    },
+                                    "one": {
+                                        "summary": "One document available",
+                                        "value": [
+                                            {
+                                                "name": "example1",
+                                                "id": "001"
+                                            }
+                                        ]
+                                    },
+                                    "multiple": {
+                                        "summary": "Multiple documents available",
+                                        "value": [
+                                            {
+                                                "name": "example1",
+                                                "id": "001"
+                                            },
+                                            {
+                                                "name": "example2",
+                                                "id": "002"
+                                            },
+                                            {
+                                                "name": "example3",
+                                                "id": "003"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/upload": {
+            "post": {
+                "summary": "Upload a new document",
+                "description": "Used to upload a new document and it’s metadata to be anchored to the blockchain. Response will include the server-generated ID of the uploaded document (for use in verification).",
+                "tags": ["Anchoring Operations"],
+                "responses": {
+                    "201": {
+                        "description": "Document was created, and anchored to the blockchain successfully"
+                    },
+                    "413": {
+                        "description": "The uploaded document was too large to be processed"
+                    }
+                }
+            }
+        },
+        "/verify": {
+            "put": {
+                "summary": "Verify an existing document",
+                "description": "Used to re-upload an existing document (specified by its ID), and the result (if the documents differ) returned in the response.",
+                "tags": ["Anchoring Operations"],
+                "responses": {
+                    "200": {
+                        "description": "The document was found"
+                    },
+                    "404": {
+                        "description": "The specified document could not be found"
+                    }
+                }
+            }
+        }
+    }
+}
