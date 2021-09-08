@@ -9,16 +9,16 @@ router.get('/', function(req, res, next) {
 
 module.exports = router;
 
-const { Client, PrivateKey, AccountCreateTransaction, AccountBalanceQuery, Hbar, TransferTransaction} = require("@hashgraph/sdk");
+const { Client, PrivateKey, AccountCreateTransaction, AccountBalanceQuery, Hbar, TransferTransaction, FileContentsQuery, FileId, TopicCreateTransaction, TopicMessageSubmitTransaction, getMessage, TopicMessageQuery} = require("@hashgraph/sdk");
 require("dotenv").config();
+
+const prompt = require('prompt-sync')();
 
 async function main() {
 
     //Grab your Hedera testnet account ID and private key from your .env file
     const myAccountId = process.env.MY_ACCOUNT_ID;
     const myPrivateKey = process.env.MY_PRIVATE_KEY;
-    const { Client, PrivateKey, AccountCreateTransaction, AccountBalanceQuery, Hbar, TransferTransaction} = require("@hashgraph/sdk");
-require("dotenv").config();
 
     // If we weren't able to grab it, we should throw a new error
     if (myAccountId == null ||
@@ -26,43 +26,98 @@ require("dotenv").config();
         throw new Error("Environment variables myAccountId and myPrivateKey must be present");
     }
 
+    const client = Client.forTestnet()
+    client.setOperator(myAccountId, myPrivateKey);
+    client.setMaxTransactionFee(new Hbar(0.1));
+
+    //collect contents of netowrk address list and print them in terminal
+    const fileQuery = new FileContentsQuery()
+        .setFileId( FileId.fromString("102"));
+    const contents = await fileQuery.execute(client);
+    //console.log(contents.toString())
+
+
+    //Create the transaction
+    const transaction = new TopicCreateTransaction()
+
+    //Sign with the client operator private key and submit the transaction to a Hedera network
+    const txResponse = await transaction.execute(client);
+
+    //Request the receipt of the transaction
+    const receipt = await txResponse.getReceipt(client);
+
+    //Get the topic ID
+    const newTopicId = receipt.topicId;
+
+    console.log("The new topic ID is " + newTopicId);
+
+    new TopicMessageQuery()
+        .setTopicId(newTopicId)
+        .setStartTime(0)
+        .subscribe(
+            client,
+            (message) => console.log(Buffer.from(message.contents, "utf8").toString())
+        );
+
+
+    await new TopicMessageSubmitTransaction({
+        topicId: receipt.topicId,
+        message: "Hello World"
+    }).execute(client);
+
+    await new TopicMessageSubmitTransaction({
+        topicId: receipt.topicId,
+        message: "Hello Australia"
+    }).execute(client); 
+
+
+    testMessage = prompt('what would you like to send to the blockchain:');
+
+    while (testMessage != "q") {
+        await new TopicMessageSubmitTransaction({
+            topicId: receipt.topicId,
+            message: testMessage
+        }).execute(client); 
+
+        testMessage = prompt('what would you like to send to the blockchain:');
+    }
+    /*
     console.log("Beginning test process");
 
     axios.post('http://0.0.0.0:8080/v1/action',{
-        "payload": "abcdefg",
+        "payload": "testpayload123",
         "submit": "direct"
     })
     .then((response) => {
-    console.log(response.statusText);
-    console.log(response.data.transactionId);
-    }, (error) => {
-    console.log(error);
-    });
-
-
-    axios.get('http://0.0.0.0:8080/v1/action/?payload=abcdefg',{
-    })
-    .then((response) => {
-    console.log(response.statusText);
+    console.log("POST request succeeded with status text %s and data:", response.statusText);
     console.log(response.data);
     }, (error) => {
-    console.log("first get request error")
     console.log(error);
     });
 
-
-
-    axios.get('http://0.0.0.0:8080/v1/action/?payload=gibberish',{
+    axios.get('http://0.0.0.0:8080/v1/action/?payload=' + 'testpayload123',{
     })
     .then((response) => {
-    console.log("second get request")
-    console.log(response);
+    console.log("GET request 1 succeeded with status text %s and data:", response.statusText);
+    console.log(response.data);
     }, (error) => {
-    console.log("second get request error")
-    console.log(error.statusText);
+    console.log("GET request 1 failed with error %s", error.response.statusText);
     });
 
-    // Create our connection to the Hedera network
+    axios.get('http://0.0.0.0:8080/v1/action/?payload=randomgibberish',{
+    })
+    .then((response) => {
+    console.log("GET request 2 succeeded with status text %s and data", response.statusText);
+    console.log(response.data);
+    }, (error) => {
+    console.log("GET request 2 failed with error %s", error.response.statusText);
+    });
+    */
+
+
+
+
+    /*// Create our connection to the Hedera network
     // The Hedera JS SDK makes this really easy!
     const client = Client.forTestnet();
 
@@ -108,7 +163,7 @@ require("dotenv").config();
 
     console.log("The account balance after the transfer is: " +getNewBalance.hbars.toTinybars() +" tinybar.")
 
-
+*/
 
 }
 main();
