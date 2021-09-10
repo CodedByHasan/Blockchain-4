@@ -7,6 +7,7 @@
  3. To install packages and node server, run `$ npm i`
 
 ## Running
+ - Start the JSX pre-processor in the background `npx babel --watch src --out-dir ./public/react-scripts --presets react-app/prod &`
  - To run on the default port, use `$ npm start`
  - If you need to specify a port, use `$ PORT=80 npm start`
  - Enter this URL in your browser: `http://localhost:3000`
