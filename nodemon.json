@@ -1,0 +1,9 @@
+{
+    "ignore": [
+        "public/*"
+    ],
+    "watch": [
+        ".",
+        "bin/www"
+    ]
+}
