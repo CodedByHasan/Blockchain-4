@@ -1,72 +1,34 @@
+<!DOCTYPE html>
 <html>
 
 <head>
   <title>Blockchain Document Validator</title>
   <link rel="stylesheet" href="/stylesheets/style.css">
-  <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
-  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
-  <!-- Don't use this in production: -->
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- Load React. -->
+  <!-- Note: when deploying, replace "development.js" with "production.min.js". -->
+  <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
 </head>
 
 <body>
   <div id="root"></div>
 
-  <script type="text/babel">
+  <div>
+    <h1>PDF Upload</h1>
+    <form id="my-up-pdf" target="stop" method="POST" action="/uploadPdf" encType="multipart/form-data">
+      <input type="file" name="pdf" />
+    </form>
+    <iframe name="stop" style="display: none;"></iframe>
+    <button onClick="document.querySelector('#my-up-pdf').submit();">upload</button>
+  </div>
 
-    ReactDOM.render(
-      (<div>
-        <div className="topNav">
-          <a className="active" href="index.html">Home</a>
-        </div>
+  <!-- Load React component. -->
+  <script src="/react-scripts/react-app.js"></script>
 
-        <div id="main">
-          <div id="anchor">
-            <h1>Anchor</h1>
-            <p>Upload a document here to save it for future validations</p>
-          </div>
-
-          <div id="validate">
-            <h1>Validate</h1>
-            <p>Upload a document here to validate it</p>
-          </div>
-
-          <div id="technologyExplanation">
-            <h1>How it works</h1>
-            <p>
-              This validation system utilises the Hedera Hasgraph blockchain to
-              validate documents, allowing users to be sure that their file is the
-              true, undoctored form of the document.
-            </p>
-            <p>Upon a document being uploaded, the system stores the document and
-              generates a [Hash technology] hash from it. It then uses Hedera
-              APIs to anchor this hash on the blockchain. In the future, when the same
-              file is uploaded to the validation section, the system generates a
-              hash again, and checks if this same hash exists on the blockchain. If
-              so, the document is valid. If not, the file has either not been
-              uploaded to the system before, or the document is invalid.</p>
-          </div>
-
-          <div>
-            <h1>PDF Upload</h1>
-            <form id="my-up-pdf" target="stop" method="POST" action="/uploadPdf" encType="multipart/form-data">
-              <input type="file" name="pdf"/>
-            </form>
-            <iframe  name="stop" style={{display: 'none'}}></iframe>
-            <button onClick={() => {
-              document.querySelector('#my-up-pdf').submit();
-            }
-            }>upload</button>
-          </div>
-        </div>
-      </div>),
-      document.getElementById('root'),
-    );
-
-  </script>
+  <!-- Not sure what we want here just yet -->
+  <footer>
+  </footer>
 </body>
 
-<!-- Not sure what we want here just yet -->
-<footer>
-</footer>
 </html>
