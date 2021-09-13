@@ -3,12 +3,16 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "mon": "nodemon ./bin/www/"
   },
   "dependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-react-app": "^3.1.2",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "express": "~4.16.1",
-    "morgan": "~1.9.1"
+    "morgan": "~1.9.1",
+    "nodemon": "^2.0.12"
   }
 }
