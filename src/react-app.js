@@ -1,5 +1,37 @@
 'use strict';
 
+{/* Form for uploading documents to be anchored */}
+class AnchorForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {fileName: ''};
+    this.handleChange = this.HandleChange.bind(this);
+    this.handleSubmit = this.HandleSubmit.bind(this);
+    this.fileInput = React.createRef();
+  }
+
+  HandleChange(event) { this.setState({fileName: event.target.value}); }
+
+  HandleSubmit(event)
+  {
+    alert('A file was submitted: ' + this.state.fileName);
+    event.preventDefault();
+  }
+
+  render() {
+    return (
+      <form onSubmit={this.HandleSubmit}>
+        <label>
+          Name:
+          <input type="text" value={this.state.fileName} onChange={this.HandleChange} />
+          <input type="file" ref={this.fileInput} />
+        </label>
+        <input type="submit" value="Submit" />
+      </form>
+    );
+  }
+}
+
 class AnchorValidate  extends React.Component
 {
   render()
@@ -11,7 +43,7 @@ class AnchorValidate  extends React.Component
           <h1>Anchor</h1>
           {/* Placeholder text */}
           <p>Upload a document here to save it for future validations.</p>
-          {/* Requires JS for upload functionality */}
+          <AnchorForm />
         </div>
 
         <div className="validate">
