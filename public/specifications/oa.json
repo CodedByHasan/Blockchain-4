@@ -1,0 +1,246 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "Blockchain-4",
+        "description": "Document Anchoring using Blockchain",
+        "version": "1.0.3"
+    },
+    "servers": [
+        {
+            "url": "/api"
+        }
+    ],
+    "tags": [
+        {
+            "name": "Informational Operations",
+            "description": "Provides information about previously uploaded documents"
+        },
+        {
+            "name": "Anchoring Operations",
+            "description": "Provide methods for anchoring and verifing documents"
+        }
+    ],
+    "paths": {
+        "/list": {
+            "get": {
+                "summary": "List all anchored documents",
+                "description": "Used to get a list of all uploaded documents available for verification. Body may contain an empty array if no documents have been uploaded.",
+                "tags": ["Informational Operations"],
+                "responses": {
+                    "200": {
+                        "description": "List of documents found and returned",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "required": [
+                                            "name",
+                                            "id"
+                                        ],
+                                        "properties": {
+                                            "name": {
+                                                "type": "string"
+                                            },
+                                            "id": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "additionalProperties": true
+                                    }
+                                },
+                                "examples": {
+                                    "empty": {
+                                        "summary": "No documents available",
+                                        "value": []
+                                    },
+                                    "one": {
+                                        "summary": "One document available",
+                                        "value": [
+                                            {
+                                                "name": "example1",
+                                                "id": "001"
+                                            }
+                                        ]
+                                    },
+                                    "multiple": {
+                                        "summary": "Multiple documents available",
+                                        "value": [
+                                            {
+                                                "name": "example1",
+                                                "id": "001"
+                                            },
+                                            {
+                                                "name": "example2",
+                                                "id": "002"
+                                            },
+                                            {
+                                                "name": "example3",
+                                                "id": "003"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/upload": {
+            "post": {
+                "summary": "Upload a new document",
+                "description": "Used to upload a new document and it’s metadata to be anchored to the blockchain. Response will include the server-generated ID of the uploaded document (for use in verification).",
+                "tags": ["Anchoring Operations"],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "document": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "required": [
+                                    "name",
+                                    "document"
+                                ]
+                            },
+                            "encoding": {
+                                "document": {
+                                    "contentType": "application/pdf"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Document was created, and anchored to the blockchain successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "required": [
+                                        "id",
+                                        "hash"
+                                    ],
+                                    "properties": {
+                                        "id": {
+                                            "type": "string"
+                                        },
+                                        "hash": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "examples": {
+                                    "success": {
+                                        "summary": "Document Upload Success",
+                                        "value": {
+                                            "id": "001"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "413": {
+                        "description": "The uploaded document was too large to be processed"
+                    }
+                }
+            }
+        },
+        "/verify": {
+            "put": {
+                "summary": "Verify an existing document",
+                "description": "Used to re-upload an existing document (specified by its ID), and the result (if the documents differ) returned in the response.",
+                "tags": ["Anchoring Operations"],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "id": {
+                                        "type": "string"
+                                    },
+                                    "document": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "required": [
+                                    "id",
+                                    "document"
+                                ]
+                            },
+                            "encoding": {
+                                "document": {
+                                    "contentType": "application/pdf"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "The document was found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "required": [
+                                        "verifySuccess",
+                                        "uploadedHash",
+                                        "storedHash"
+                                    ],
+                                    "properties": {
+                                        "verifySuccess": {
+                                            "type": "boolean"
+                                        },
+                                        "uploadedHash": {
+                                            "type": "string"
+                                        },
+                                        "storedHash": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "examples": {
+                                    "success": {
+                                        "summary": "Validation Succeeded",
+                                        "value": {
+                                            "verifySuccess": true,
+                                            "uploadedHash": "ac0b17dac471725dcd03e16c895cb27c0ccfbf9bc0cc58a14c857c662532e6a6",
+                                            "storedHash": "ac0b17dac471725dcd03e16c895cb27c0ccfbf9bc0cc58a14c857c662532e6a6"
+                                        }
+                                    },
+                                    "failure": {
+                                        "summary": "Validation Failed",
+                                        "value": {
+                                            "verifySuccess": false,
+                                            "uploadedHash": "6afc373dfe104684608b9e78093a613561cec5f72a36dd7e04c2ae9718f8fd3c",
+                                            "storedHash": "ac0b17dac471725dcd03e16c895cb27c0ccfbf9bc0cc58a14c857c662532e6a6"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "The specified document could not be found"
+                    }
+                }
+            }
+        }
+    }
+}
