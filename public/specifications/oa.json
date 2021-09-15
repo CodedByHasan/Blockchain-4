@@ -3,7 +3,7 @@
     "info": {
         "title": "Blockchain-4",
         "description": "Document Anchoring using Blockchain",
-        "version": "1.0.3"
+        "version": "1.0.4"
     },
     "servers": [
         {
@@ -122,7 +122,7 @@
                     }
                 },
                 "responses": {
-                    "201": {
+                    "200": {
                         "description": "Document was created, and anchored to the blockchain successfully",
                         "content": {
                             "application/json": {
