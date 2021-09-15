@@ -16,7 +16,7 @@ app.use(express.json());
 //Connects to our MongoDB database
 mongoose.connect(
 
-'mongodb+srv://dbUser:dbUserPassword@cluster0.eprvg.mongodb.net/test?retryWrites=true&w=majority)',
+'mongodb+srv://dbUser:dbUserPassword@cluster0.eprvg.mongodb.net/test?retryWrites=true&w=majority',
 
 );
 
