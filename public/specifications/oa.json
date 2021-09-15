@@ -3,7 +3,7 @@
     "info": {
         "title": "Blockchain-4",
         "description": "Document Anchoring using Blockchain",
-        "version": "1.0.2"
+        "version": "1.0.3"
     },
     "servers": [
         {
@@ -123,7 +123,34 @@
                 },
                 "responses": {
                     "201": {
-                        "description": "Document was created, and anchored to the blockchain successfully"
+                        "description": "Document was created, and anchored to the blockchain successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "required": [
+                                        "id",
+                                        "hash"
+                                    ],
+                                    "properties": {
+                                        "id": {
+                                            "type": "string"
+                                        },
+                                        "hash": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "examples": {
+                                    "success": {
+                                        "summary": "Document Upload Success",
+                                        "value": {
+                                            "id": "001"
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     },
                     "413": {
                         "description": "The uploaded document was too large to be processed"
@@ -166,7 +193,48 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "The document was found"
+                        "description": "The document was found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "required": [
+                                        "verifySuccess",
+                                        "uploadedHash",
+                                        "storedHash"
+                                    ],
+                                    "properties": {
+                                        "verifySuccess": {
+                                            "type": "boolean"
+                                        },
+                                        "uploadedHash": {
+                                            "type": "string"
+                                        },
+                                        "storedHash": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "examples": {
+                                    "success": {
+                                        "summary": "Validation Succeeded",
+                                        "value": {
+                                            "verifySuccess": true,
+                                            "uploadedHash": "ac0b17dac471725dcd03e16c895cb27c0ccfbf9bc0cc58a14c857c662532e6a6",
+                                            "storedHash": "ac0b17dac471725dcd03e16c895cb27c0ccfbf9bc0cc58a14c857c662532e6a6"
+                                        }
+                                    },
+                                    "failure": {
+                                        "summary": "Validation Failed",
+                                        "value": {
+                                            "verifySuccess": false,
+                                            "uploadedHash": "6afc373dfe104684608b9e78093a613561cec5f72a36dd7e04c2ae9718f8fd3c",
+                                            "storedHash": "ac0b17dac471725dcd03e16c895cb27c0ccfbf9bc0cc58a14c857c662532e6a6"
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     },
                     "404": {
                         "description": "The specified document could not be found"
