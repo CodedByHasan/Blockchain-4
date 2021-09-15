@@ -16,7 +16,7 @@ app.use(express.json());
 //Connects to our MongoDB database
 mongoose.connect(
 
-'mongodb+srv://dbUser:dbUserPassword@cluster0.eprvg.mongodb.net/myFirstDatabase?retryWrites=true&w=majority)',
+'mongodb+srv://dbUser:dbUserPassword@cluster0.eprvg.mongodb.net/test?retryWrites=true&w=majority)',
 
 );
 
@@ -37,3 +37,5 @@ app.use(Router);
 app.listen(3000, () => {
 	console.log("Server is running at port 3000");
 });
+
+app.post
