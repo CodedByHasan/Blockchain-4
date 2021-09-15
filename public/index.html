@@ -1,88 +1,35 @@
+<!DOCTYPE html>
 <html>
 
 <head>
   <title>Blockchain Document Validator</title>
   <link rel="stylesheet" href="/stylesheets/style.css">
+
+  <!-- Load React. -->
+  <!-- Note: when deploying, replace "development.js" with "production.min.js". -->
+  <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
 </head>
 
 <body>
-  <!-- Nav Bar -->
-  <div class="topNav">
-    <a class="active" href="index.html">Home</a>
+  <div id="root"></div>
+
+  <div>
+    <h1>PDF Upload</h1>
+    <form id="my-up-pdf" target="stop" method="POST" action="/api/upload" encType="multipart/form-data">
+      <input type="text" name="name" />
+      <input type="file" name="document" />
+    </form>
+    <iframe name="stop" style="display: none;"></iframe>
+    <button onClick="document.querySelector('#my-up-pdf').submit();">upload</button>
   </div>
 
-  <div id="main">
+  <!-- Load React component. -->
+  <script src="/react-scripts/react-app.js"></script>
 
-    <!-- Two divs to float next to eachother.
-    Both will be toggleable with React/JS such that once an action is performed,
-    another div appears instead of them, such as the "success" div upon
-    document upload -->
-    <div id="anchor">
-      <h1>Anchor</h1>
-      <!-- Placeholder text -->
-      <p>Upload a document here to save it for future validations</p>
-      <!-- Requires JS for upload functionality -->
-    </div>
-
-    <div id="validate">
-      <h1>Validate</h1>
-      <!-- Placeholder text -->
-      <p>Upload a document here to validate it</p>
-      <!-- Requires JS for upload functionality -->
-    </div>
-
-    <!-- anchorSuccess div appears in main upon a successful document upload
-    to anchor div
-    <div id="anchorSuccess">
-      <h1>Upload Successful</h1>
-      <p>
-        Your document has been successfully uploaded, future attempts to
-        validate this file will be successful
-      </p>
-    </div>
-    -->
-
-    <!-- validateSuccess div appears in main upon a succesful document upload
-    to validate div that results in a blockchain hit
-    <div id="validateSuccess">
-      <h1>Document is Valid</h1>
-      <p>Your document is valid</p>
-    </div>
-    -->
-
-    <!-- validateFailure div appears in main upon a succesful document upload
-    to validate div that does not result in a blockchain hit
-    <div id="validateFailure">
-      <h1>Document is Invalid</h1>
-      <p>
-        Sorry, we couldn't validate your document. Your file may never have
-        been uploaded to the validation system, or may be a doctored form of the
-        true document
-      </p>
-    </div>
-    -->
-
-    <div id="technologyExplanation">
-      <h1>How it works</h1>
-      <p>
-        This validation system utilises the Hedera Hasgraph blockchain to
-        validate documents, allowing users to be sure that their file is the
-        true, undoctored form of the document.
-      </p>
-      <p>Upon a document being uploaded, the system stores the document and
-        generates a [Hash technology] hash from it. It then uses Hedera
-        APIs to anchor this hash on the blockchain. In the future, when the same
-        file is uploaded to the validation section, the system generates a
-        hash again, and checks if this same hash exists on the blockchain. If
-        so, the document is valid. If not, the file has either not been
-        uploaded to the system before, or the document is invalid.
-    </div>
-  </div>
-
+  <!-- Not sure what we want here just yet -->
+  <footer>
+  </footer>
 </body>
-
-<!-- Not sure what we want here just yet -->
-<footer>
-</footer>
 
 </html>
