@@ -3,7 +3,7 @@
     "info": {
         "title": "Blockchain-4",
         "description": "Document Anchoring using Blockchain",
-        "version": "1.0.1"
+        "version": "1.0.2"
     },
     "servers": [
         {
@@ -136,6 +136,34 @@
                 "summary": "Verify an existing document",
                 "description": "Used to re-upload an existing document (specified by its ID), and the result (if the documents differ) returned in the response.",
                 "tags": ["Anchoring Operations"],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "id": {
+                                        "type": "string"
+                                    },
+                                    "document": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "required": [
+                                    "id",
+                                    "document"
+                                ]
+                            },
+                            "encoding": {
+                                "document": {
+                                    "contentType": "application/pdf"
+                                }
+                            }
+                        }
+                    }
+                },
                 "responses": {
                     "200": {
                         "description": "The document was found"
