@@ -3,7 +3,7 @@
     "info": {
         "title": "Blockchain-4",
         "description": "Document Anchoring using Blockchain",
-        "version": "1.0.3"
+        "version": "1.0.4"
     },
     "servers": [
         {
@@ -122,7 +122,7 @@
                     }
                 },
                 "responses": {
-                    "201": {
+                    "200": {
                         "description": "Document was created, and anchored to the blockchain successfully",
                         "content": {
                             "application/json": {
@@ -145,7 +145,8 @@
                                     "success": {
                                         "summary": "Document Upload Success",
                                         "value": {
-                                            "id": "001"
+                                            "id": "001",
+                                            "hash": "ac0b17dac471725dcd03e16c895cb27c0ccfbf9bc0cc58a14c857c662532e6a6"
                                         }
                                     }
                                 }
