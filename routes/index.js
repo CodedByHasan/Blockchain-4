@@ -9,7 +9,7 @@ router.get('/', function(req, res, next) {
 
 module.exports = router;
 
-const { Client, PrivateKey, AccountCreateTransaction, AccountBalanceQuery, Hbar, TransferTransaction, FileContentsQuery, FileId, TopicCreateTransaction, TopicMessageSubmitTransaction, getMessage, TopicMessageQuery} = require("@hashgraph/sdk");
+const { Client, PrivateKey, AccountCreateTransaction, AccountBalanceQuery, Hbar, TransferTransaction, FileContentsQuery, FileId, TopicCreateTransaction, TopicMessageSubmitTransaction, getMessage, TopicMessageQuery, TopicId, getAdminKey, getSubmitKey, transaction} = require("@hashgraph/sdk");
 require("dotenv").config();
 
 const prompt = require('prompt-sync')();
@@ -19,6 +19,8 @@ async function main() {
     //Grab your Hedera testnet account ID and private key from your .env file
     const myAccountId = process.env.MY_ACCOUNT_ID;
     const myPrivateKey = process.env.MY_PRIVATE_KEY;
+
+    console.log("Private key is " + myPrivateKey);
 
     // If we weren't able to grab it, we should throw a new error
     if (myAccountId == null ||
@@ -36,9 +38,15 @@ async function main() {
     const contents = await fileQuery.execute(client);
     //console.log(contents.toString())
 
+    const query = new AccountBalanceQuery()
+            .setAccountId(myAccountId);
+
+    const accountBalance = await query.execute(client);
+
+    console.log("The account balance is " + accountBalance.hbars);
 
     //Create the transaction
-    const transaction = new TopicCreateTransaction()
+    const transaction = new TopicCreateTransaction().setTopicMemo("Document Anchoring Topic")
 
     //Sign with the client operator private key and submit the transaction to a Hedera network
     const txResponse = await transaction.execute(client);
@@ -46,10 +54,15 @@ async function main() {
     //Request the receipt of the transaction
     const receipt = await txResponse.getReceipt(client);
 
+    console.log(receipt);
     //Get the topic ID
-    const newTopicId = receipt.topicId;
+    //const newTopicId = receipt.topicId;
+    const newTopicId = new TopicId(0,0,2524625);
 
-    console.log("The new topic ID is " + newTopicId);
+    console.log("The topic ID is " + newTopicId);
+
+    //console.log("The Admin Key is " + transaction.getAdminKey());
+    //console.log("The Submit Key is " + transaction.getSubmitKey());
 
     new TopicMessageQuery()
         .setTopicId(newTopicId)
@@ -59,28 +72,18 @@ async function main() {
             (message) => console.log(Buffer.from(message.contents, "utf8").toString())
         );
 
-
-    await new TopicMessageSubmitTransaction({
-        topicId: receipt.topicId,
-        message: "Hello World"
-    }).execute(client);
-
-    await new TopicMessageSubmitTransaction({
-        topicId: receipt.topicId,
-        message: "Hello Australia"
-    }).execute(client); 
-
-
-    testMessage = prompt('what would you like to send to the blockchain:');
+    testMessage = "First Message"
 
     while (testMessage != "q") {
         await new TopicMessageSubmitTransaction({
-            topicId: receipt.topicId,
+            //topicId: receipt.topicId,
+            topicId: newTopicId,
+            //topicId: "0.0.2444615",
             message: testMessage
         }).execute(client); 
-
         testMessage = prompt('what would you like to send to the blockchain:');
     }
+
     /*
     console.log("Beginning test process");
 
@@ -123,9 +126,7 @@ async function main() {
 
     client.setOperator(myAccountId, myPrivateKey);
 
-    //Create new keys
-    const newAccountPrivateKey = await PrivateKey.generate(); 
-    const newAccountPublicKey = newAccountPrivateKey.publicKey;
+
 
     //Create a new account with 1,000 tinybar starting balance
     const newAccountTransactionResponse = await new AccountCreateTransaction()
