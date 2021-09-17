@@ -24,7 +24,7 @@ router.post('/upload/', upload.any(), function(req, res, next) {
     //Hash the file
     let hash = anchor.hashFile(req.files[0].buffer);
     //Save the document in the datastore and keep track of it's ID
-    let id = anchor.saveDocument(hash);
+    let id = anchor.saveDocument(hash, req.body.name);
     //Send a response back to the client
     res.json({id:id, hash:hash});
 });
