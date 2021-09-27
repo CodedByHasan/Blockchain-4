@@ -4,7 +4,10 @@
 class AnchorForm extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {fileName: ''};
+    this.state = {
+      fileName: '',
+      uploadedFile: null,
+    };
     this.handleChange = this.HandleChange.bind(this);
     this.handleSubmit = this.HandleSubmit.bind(this);
     this.fileInput = React.createRef();
@@ -12,32 +15,34 @@ class AnchorForm extends React.Component {
 
   HandleChange(event) { this.setState({fileName: event.target.value}); }
 
-  HandleSubmit(event)
-  {
+  HandleSubmit(event) {
     alert('A file was submitted: ' + this.state.fileName);
     event.preventDefault();
+    this.setState({uploadedFile: this.fileInput.current.files[0]});
+    console.log(this.fileInput.current.files[0]);
   }
 
   render() {
     return (
-      <form onSubmit={this.HandleSubmit}>
+      <form onSubmit={this.handleSubmit}>
         <label>
           Name:
-          <input type="text" value={this.state.fileName} onChange={this.HandleChange} />
+          <input type="text" value={this.state.fileName} onChange={this.handleChange} />
           <input type="file" ref={this.fileInput} />
         </label>
-        <input type="submit" value="Submit" />
+        <button type="submit">Submit</button>
       </form>
     );
   }
 }
 
+{/* Default rendered component, allows a user to upload a document either for
+validation against an existing anchored document, or to anchor new document */}
 class AnchorValidate  extends React.Component
 {
   render()
   {
-    return
-    (
+    return (
       <div>
         <div className="anchor">
           <h1>Anchor</h1>
@@ -57,12 +62,12 @@ class AnchorValidate  extends React.Component
   }
 }
 
+{/* Renders on page if an uploaded document was succesfully anchored */}
 class AnchorSuccess extends React.Component
 {
   render()
   {
-    return
-    (
+    return (
       <div className="anchorSuccess">
         <h1>Upload Successful</h1>
         <p>
@@ -74,12 +79,12 @@ class AnchorSuccess extends React.Component
   }
 }
 
+{/* Renders on page if an uploaded document could not be anchored */}
 class AnchorFailure extends React.Component
 {
   render()
   {
-    return
-    (
+    return (
       <div className="anchorFailure">
         <h1>Upload Failed</h1>
         <p>
@@ -90,12 +95,12 @@ class AnchorFailure extends React.Component
   }
 }
 
+{/* Renders on page if uploaded document was succesfully validated */}
 class ValidateSuccess extends React.Component
 {
   render()
   {
-    return
-    (
+    return (
       <div className="validateSuccess">
         <h1>Document is Valid</h1>
         <p>Your document is valid</p>
@@ -104,12 +109,12 @@ class ValidateSuccess extends React.Component
   }
 }
 
+{/* Renders on page if the uploaded document could not be validated */}
 class ValidateFailure extends React.Component
 {
   render()
   {
-    return
-    (
+    return (
       <div className="validateFailure">
         <h1>Document is Invalid</h1>
         <p>
@@ -122,12 +127,12 @@ class ValidateFailure extends React.Component
   }
 }
 
+{/* A component which explains how the document anchoring system works */}
 class TechnologyExplanation extends React.Component
 {
   render()
   {
-    return
-    (
+    return (
       <div className="technologyExplanation">
         <h1>How it works</h1>
         <p>
@@ -149,6 +154,7 @@ class TechnologyExplanation extends React.Component
   }
 }
 
+{/* Main component which renders the correct sub-component based on its state */}
 class Main extends React.Component
 {
   constructor(props)
@@ -166,20 +172,43 @@ class Main extends React.Component
     switch(this.state.display)
     {
       case "anchorSuccess":
-        return (<AnchorSuccess /><TechnologyExplanation />);
+        return (
+          <div>
+            <AnchorSuccess />
+            <TechnologyExplanation />
+          </div>
+        );
         break;
       case "anchorFailure":
-        return (<AnchorFailure /><TechnologyExplanation />);
+        return (
+          <div>
+            <AnchorFailure />
+            <TechnologyExplanation />
+          </div>
+        );
         break;
       case "validateSuccess":
-        return (<ValidateSuccess /><TechnologyExplanation />);
+        return (
+          <div>
+            <ValidateSuccess />
+            <TechnologyExplanation />
+          </div>);
         break;
       case "validateFailure":
-        return (<ValidateFailure /><TechnologyExplanation />);
+        return (
+          <div>
+            <ValidateFailure />
+            <TechnologyExplanation />
+          </div>
+        );
         break;
       //  Default state is displaying a validate and anchor div side by side
       default:
-        return (<AnchorValidate /><TechnologyExplanation />);
+        return (
+          <div>
+            <AnchorValidate />
+            <TechnologyExplanation />
+          </div>);
         break;
     }
   }
