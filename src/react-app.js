@@ -1,3 +1,4 @@
+{/* axios is a library for sending AJAX requests */}
 'use strict';
 
 {/* Form for uploading documents to be anchored */}
@@ -20,6 +21,13 @@ class AnchorForm extends React.Component {
     event.preventDefault();
     this.setState({uploadedFile: this.fileInput.current.files[0]});
     console.log(this.fileInput.current.files[0]);
+    const data = new FormData();
+    data.append('file', this.state.uploadedFile);
+    axios.post("/api/upload", data)
+    .then(res=> {
+      console.log(res.statusText);
+    });
+
   }
 
   render() {
@@ -30,7 +38,7 @@ class AnchorForm extends React.Component {
           <input type="text" value={this.state.fileName} onChange={this.handleChange} />
           <input type="file" ref={this.fileInput} />
         </label>
-        <button type="submit">Submit</button>
+        <button type="submit">Upload</button>
       </form>
     );
   }

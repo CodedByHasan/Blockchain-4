@@ -4,11 +4,6 @@
 <head>
   <title>Blockchain Document Validator</title>
   <link rel="stylesheet" href="/stylesheets/style.css">
-
-  <!-- Load React. -->
-  <!-- Note: when deploying, replace "development.js" with "production.min.js". -->
-  <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
-  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
 </head>
 
 <body>
@@ -24,12 +19,17 @@
     <button onClick="document.querySelector('#my-up-pdf').submit();">upload</button>
   </div>
 
-  <!-- Load React component. -->
-  <script src="/react-scripts/react-app.js"></script>
-
   <!-- Not sure what we want here just yet -->
   <footer>
   </footer>
+  <!-- Load axios, a supporting library for the React app -->
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <!-- Load React. -->
+  <!-- Note: when deploying, replace "development.js" with "production.min.js". -->
+  <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+  <!-- Load React component. -->
+  <script src="/react-scripts/react-app.js"></script>
 </body>
 
 </html>
