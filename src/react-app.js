@@ -16,6 +16,8 @@ class AnchorForm extends React.Component {
 
   HandleChange(event) { this.setState({fileName: event.target.value}); }
 
+  /* When form is submitted, this function runes to alert the user
+  that they have uploaded a file, and send it to the server */
   HandleSubmit(event) {
     alert('A file was submitted: ' + this.state.fileName);
     event.preventDefault();
@@ -23,6 +25,7 @@ class AnchorForm extends React.Component {
     console.log(this.fileInput.current.files[0]);
     const data = new FormData();
     data.append('file', this.state.uploadedFile);
+    // Upload the file and then log the return status 
     axios.post("/api/upload", data)
     .then(res=> {
       console.log(res.statusText);
