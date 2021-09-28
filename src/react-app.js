@@ -16,28 +16,40 @@ class AnchorForm extends React.Component {
 
   HandleChange(event) { this.setState({fileName: event.target.value}); }
 
-  /* When form is submitted, this function runes to alert the user
-  that they have uploaded a file, and send it to the server */
+  /* When form is submitted, this function runs to alert the user
+  that they have uploaded a file, and sends the file to the server with an
+  axios request*/
   HandleSubmit(event) {
     alert('A file was submitted: ' + this.state.fileName);
     event.preventDefault();
     this.setState({uploadedFile: this.fileInput.current.files[0]});
     console.log(this.fileInput.current.files[0]);
+    // Create data to send through axios post request
     const data = new FormData();
     data.append('file', this.state.uploadedFile);
-    // Upload the file and then log the return status 
+    // Upload the file and then log the return status
     axios.post("/api/upload", data)
     .then(res=> {
-      console.log(res.statusText);
+      console.log(res.status);
+      /* If the response status is 200, render AnchorSucess,
+      else render AnchorFailure */
+      if(res.status == 200)
+      {
+        this.props.onDisplayChange('anchorSuccess');
+      }
+      else
+      {
+        this.props.onDisplayChange('anchorFailure');
+      }
     });
 
   }
-
+  // Displays a form for uploading a file and entering a custom file name
   render() {
     return (
       <form onSubmit={this.handleSubmit}>
         <label>
-          Name:
+          File name:
           <input type="text" value={this.state.fileName} onChange={this.handleChange} />
           <input type="file" ref={this.fileInput} />
         </label>
@@ -58,7 +70,8 @@ class AnchorValidate  extends React.Component
         <div className="anchor">
           <h1>Anchor</h1>
           {/* Placeholder text */}
-          <p>Upload a document here to save it for future validations.</p>
+          <p>Upload a document here and enter a custom name for it. The
+          document will be anchored on the blockchain for future validations.</p>
           <AnchorForm />
         </div>
 
@@ -173,8 +186,14 @@ class Main extends React.Component
     super(props);
     this.state =
     {
-      display: "anchor-validate",
+      display: "anchorValidate",
     }
+  }
+
+  /* Called by sub-components. Changes the sub-component rendered by Main,
+  depending on the result of certain user actions */
+  handleDisplayChange(toBeDisplayed) {
+    this.setState({display: toBeDisplayed});
   }
 
   render()
@@ -185,7 +204,7 @@ class Main extends React.Component
       case "anchorSuccess":
         return (
           <div>
-            <AnchorSuccess />
+            <AnchorSuccess onDisplayChange={this.handleDisplayChange} />
             <TechnologyExplanation />
           </div>
         );
@@ -193,7 +212,7 @@ class Main extends React.Component
       case "anchorFailure":
         return (
           <div>
-            <AnchorFailure />
+            <AnchorFailure onDisplayChange={this.handleDisplayChange} />
             <TechnologyExplanation />
           </div>
         );
@@ -201,14 +220,14 @@ class Main extends React.Component
       case "validateSuccess":
         return (
           <div>
-            <ValidateSuccess />
+            <ValidateSuccess onDisplayChange={this.handleDisplayChange} />
             <TechnologyExplanation />
           </div>);
         break;
       case "validateFailure":
         return (
           <div>
-            <ValidateFailure />
+            <ValidateFailure onDisplayChange={this.handleDisplayChange} />
             <TechnologyExplanation />
           </div>
         );
@@ -217,7 +236,7 @@ class Main extends React.Component
       default:
         return (
           <div>
-            <AnchorValidate />
+            <AnchorValidate onDisplayChange={this.handleDisplayChange} />
             <TechnologyExplanation />
           </div>);
         break;
