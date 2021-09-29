@@ -102,6 +102,7 @@ class AnchorSuccess extends React.Component
           Your document has been successfully uploaded, future attempts to
           validate this file will be successful.
         </p>
+        <button onClick={onDisplayChange('anchorValidate')}>Return to Homepage</button>
       </div>
     );
   }
@@ -118,6 +119,7 @@ class AnchorFailure extends React.Component
         <p>
           Your document could not be uploaded, contact your system administrator.
         </p>
+        <button onClick={onDisplayChange('anchorValidate')}>Return to Homepage</button>
       </div>
     );
   }
@@ -132,6 +134,7 @@ class ValidateSuccess extends React.Component
       <div className="validateSuccess">
         <h1>Document is Valid</h1>
         <p>Your document is valid</p>
+        <button onClick={onDisplayChange('anchorValidate')}>Return to Homepage</button>
       </div>
     );
   }
@@ -150,6 +153,7 @@ class ValidateFailure extends React.Component
           been uploaded to the validation system, or may be a doctored form of the
           true document
         </p>
+        <button onClick={onDisplayChange('anchorValidate')}>Return to Homepage</button>
       </div>
     );
   }
