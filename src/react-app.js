@@ -24,16 +24,20 @@ class AnchorForm extends React.Component {
     event.preventDefault();
     this.setState({uploadedFile: this.fileInput.current.files[0]});
     console.log(this.fileInput.current.files[0]);
-    // Create data to send through axios post request
-    const data = new FormData();
-    data.append('file', this.state.uploadedFile);
-    // Upload the file and then log the return status
-    axios.post("/api/upload", data)
+    // Upload the file and then log the return status and change display
+    axios({
+      method: 'post',
+      url: '/api/upload',
+      data: {
+        name: this.state.fileName,
+        files: this.fileInput.current.files
+      }
+    })
     .then(res=> {
       console.log(res.status);
       /* If the response status is 200, render AnchorSucess,
       else render AnchorFailure */
-      if(res.status == 200)
+      if(res.status == '200')
       {
         this.props.onDisplayChange('anchorSuccess');
       }
