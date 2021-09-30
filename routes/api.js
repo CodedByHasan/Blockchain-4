@@ -18,7 +18,7 @@ router.get('/list/', function(req, res, next) {
  */
 router.post('/upload/', upload.any(), function(req, res, next) {
     //Check for required parameters
-    if (!('name' in req.body) || req.files.length < 1) {
+    if (!('name' in req.body) || req.body.name.length < 1 || req.files.length < 1) {
         return res.sendStatus(400);
     }
     //Hash the file
@@ -35,7 +35,7 @@ router.post('/upload/', upload.any(), function(req, res, next) {
  */
 router.put('/verify/', upload.any(), function(req, res, next) {
     //Check for required parameters
-    if (!('id' in req.body) || req.files.length < 1) {
+    if (!('id' in req.body) || req.body.id.length < 1 || req.files.length < 1) {
         return res.sendStatus(400);
     }
     //Find the document in the datastore
