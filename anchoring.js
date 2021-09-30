@@ -60,4 +60,4 @@ module.exports = {
         //Create hashing object -> Add the file to be hashed -> Get hex representation
         return crypto.createHash('sha256').update(file).digest('hex');
     }
-}
+};
