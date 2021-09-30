@@ -27,10 +27,10 @@ class AnchorForm extends React.Component {
     this.setState({uploadedFile: this.fileInput.current.files[0]});
     console.log(this.fileInput.current.files[0]);
     // Upload the file and then log the return status and change display
-    const formData = new FormData();
-    formData.append('files', this.fileInput.current.files);
-    formData.append('name', this.state.fileName);
-    axios.post("/api/upload", formData, {
+    const form = new FormData();
+    form.append('name', this.state.fileName);
+    form.append('file', this.fileInput.current.files[0]);
+    axios.post('/api/upload', form, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
