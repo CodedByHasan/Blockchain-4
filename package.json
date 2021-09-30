@@ -17,7 +17,9 @@
     "multer": "^1.4.3",
     "nodemon": "^2.0.12"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "eslint": "^7.32.0"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/CodedByHasan/Blockchain-4.git"
