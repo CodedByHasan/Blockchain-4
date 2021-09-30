@@ -14,23 +14,25 @@ class AnchorForm extends React.Component {
     this.fileInput = React.createRef();
   }
 
-  HandleChange(event) { this.setState({fileName: event.target.value}); }
+  HandleChange(event)
+  { this.setState({fileName: event.target.value}); }
 
   /* When form is submitted, this function runs to alert the user
   that they have uploaded a file, and sends the file to the server with an
   axios request*/
-  HandleSubmit(event) {
+  HandleSubmit(event)
+  {
     alert('A file was submitted: ' + this.state.fileName);
     event.preventDefault();
     this.setState({uploadedFile: this.fileInput.current.files[0]});
     console.log(this.fileInput.current.files[0]);
     // Upload the file and then log the return status and change display
-    axios({
-      method: 'post',
-      url: '/api/upload',
-      data: {
-        name: this.state.fileName,
-        files: this.fileInput.current.files
+    const formData = new FormData();
+    formData.append('files', this.fileInput.current.files);
+    formData.append('name', this.state.fileName);
+    axios.post("/api/upload", formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
       }
     })
     .then(res=> {
@@ -49,7 +51,8 @@ class AnchorForm extends React.Component {
 
   }
   // Displays a form for uploading a file and entering a custom file name
-  render() {
+  render()
+  {
     return (
       <form onSubmit={this.handleSubmit}>
         <label>

@@ -18,11 +18,11 @@ router.get('/list/', function(req, res, next) {
  */
 router.post('/upload/', upload.any(), function(req, res, next) {
     //Check for required parameters
-    if (!('name' in req.body) || req.body.files.length < 1) {
+    if (!('name' in req.body) || req.files.length < 1) {
         return res.sendStatus(400);
     }
     //Hash the file
-    let hash = anchor.hashFile(req.body.files[0].buffer);
+    let hash = anchor.hashFile(req.files[0].buffer);
     //Save the document in the datastore and keep track of it's ID
     let id = anchor.saveDocument(hash, req.body.name);
     //Send a response back to the client
