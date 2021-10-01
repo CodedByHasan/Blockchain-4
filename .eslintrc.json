@@ -26,7 +26,10 @@
             "always"
         ],
         "curly": "error",
-        "brace-style": "error",
+        "brace-style": [
+            "error",
+            "allman"
+        ],
         "camelcase": "error",
         "eol-last": [
             "error",
