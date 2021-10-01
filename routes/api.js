@@ -20,7 +20,7 @@ router.get('/list/', function (req, res)
 router.post('/upload/', upload.any(), function (req, res) 
 {
     //Check for required parameters
-    if (!('name' in req.body) || req.files.length < 1) 
+    if (!('name' in req.body) || req.body.name.length < 1 || req.files.length < 1) 
     {
         return res.sendStatus(400);
     }
@@ -39,7 +39,7 @@ router.post('/upload/', upload.any(), function (req, res)
 router.put('/verify/', upload.any(), function (req, res) 
 {
     //Check for required parameters
-    if (!('id' in req.body) || req.files.length < 1) 
+    if (!('id' in req.body) || req.body.id.length < 1 || req.files.length < 1) 
     {
         return res.sendStatus(400);
     }
