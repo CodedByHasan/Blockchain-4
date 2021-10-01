@@ -15,6 +15,7 @@ class ValidateForm extends React.Component
     this.handleDropDownChange = this.HandleDropDownChange.bind(this);
     this.fileInput = React.createRef();
   }
+  // Submits a file to be validated against a selected existing document
   HandleSubmit(event)
   {
     event.preventDefault();
@@ -29,7 +30,7 @@ class ValidateForm extends React.Component
       }
     })
     .then(res =>
-    { /* If the response status is 200, render AnchorSucess */
+    { /* If the response status is 200, render ValidateSuccess */
       console.log(res.status);
       if(res.status == '200')
       {
@@ -37,7 +38,7 @@ class ValidateForm extends React.Component
       }
     })
     .catch(error =>
-    { // If the response was outside of 2xx, render AnchorFailure
+    { // If the response was outside of 2xx, render ValidateFailure
       if(error.response)
       {
         this.props.OnDisplayChange('validateFailure');
@@ -242,7 +243,7 @@ class ValidateSuccess extends React.Component
   {
     return (
       <div className="validateSuccess">
-        <h1>Document is Valid</h1>
+        <h1>Validation Successful</h1>
         <p>Your document is valid</p>
         <button onClick={this.handleClick}>Return to Homepage</button>
       </div>
@@ -269,8 +270,8 @@ class ValidateFailure extends React.Component
         <h1>Document is Invalid</h1>
         <p>
           Sorry, we couldn't validate your document. Your file may never have
-          been uploaded to the validation system, or may be a doctored form of the
-          true document
+          been uploaded to the validation system, or may be a doctored form of
+          the true document
         </p>
         <button onClick={this.handleClick}>Return to Homepage</button>
       </div>
