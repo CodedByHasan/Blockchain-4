@@ -9,16 +9,19 @@ var router = express.Router();
 /**
  * Route for getting a list of all previously uploaded and anchored documents
  */
-router.get('/list/', function(req, res, next) {
+router.get('/list/', function (req, res) 
+{
     res.json(anchor.hashDict);
 });
 
 /**
  * Route for uploading a new document, and anchoring it to the blockchain
  */
-router.post('/upload/', upload.any(), function(req, res, next) {
+router.post('/upload/', upload.any(), function (req, res) 
+{
     //Check for required parameters
-    if (!('name' in req.body) || req.body.name.length < 1 || req.files.length < 1) {
+    if (!('name' in req.body) || req.body.name.length < 1 || req.files.length < 1) 
+    {
         return res.sendStatus(400);
     }
     //Hash the file
@@ -33,15 +36,18 @@ router.post('/upload/', upload.any(), function(req, res, next) {
  * Route for reuploading a document, and comparing it's fingerprint to the
  * fingerprint of the matching document on the blockchain
  */
-router.put('/verify/', upload.any(), function(req, res, next) {
+router.put('/verify/', upload.any(), function (req, res) 
+{
     //Check for required parameters
-    if (!('id' in req.body) || req.body.id.length < 1 || req.files.length < 1) {
+    if (!('id' in req.body) || req.body.id.length < 1 || req.files.length < 1) 
+    {
         return res.sendStatus(400);
     }
     //Find the document in the datastore
     let document = anchor.findDocument(req.body.id);
     //Check if we know about the document ID
-    if (document === null) {
+    if (document === null) 
+    {
         return res.sendStatus(404);
     }
     //Hash the file
