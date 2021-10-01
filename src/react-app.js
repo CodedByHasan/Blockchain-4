@@ -41,11 +41,11 @@ class AnchorForm extends React.Component {
       else render AnchorFailure */
       if(res.status == '200')
       {
-        this.props.onDisplayChange('anchorSuccess');
+        this.props.OnDisplayChange('anchorSuccess');
       }
       else
       {
-        this.props.onDisplayChange('anchorFailure');
+        this.props.OnDisplayChange('anchorFailure');
       }
     });
 
@@ -79,7 +79,7 @@ class AnchorValidate  extends React.Component
           {/* Placeholder text */}
           <p>Upload a document here and enter a custom name for it. The
           document will be anchored on the blockchain for future validations.</p>
-          <AnchorForm />
+          <AnchorForm OnDisplayChange={this.props.OnDisplayChange}/>
         </div>
 
         <div className="validate">
@@ -96,6 +96,15 @@ class AnchorValidate  extends React.Component
 {/* Renders on page if an uploaded document was succesfully anchored */}
 class AnchorSuccess extends React.Component
 {
+  constructor(props)
+  {
+    super(props);
+    this.handleClick = this.HandleClick.bind(this);
+  }
+  HandleClick()
+  {
+    this.props.OnDisplayChange('anchorValidate');
+  }
   render()
   {
     return (
@@ -105,7 +114,7 @@ class AnchorSuccess extends React.Component
           Your document has been successfully uploaded, future attempts to
           validate this file will be successful.
         </p>
-        <button onClick={onDisplayChange('anchorValidate')}>Return to Homepage</button>
+        <button onClick={this.handleClick}>Return to Homepage</button>
       </div>
     );
   }
@@ -114,6 +123,15 @@ class AnchorSuccess extends React.Component
 {/* Renders on page if an uploaded document could not be anchored */}
 class AnchorFailure extends React.Component
 {
+  constructor(props)
+  {
+    super(props);
+    this.handleClick = this.HandleClick.bind(this);
+  }
+  HandleClick()
+  {
+    this.props.OnDisplayChange('anchorValidate');
+  }
   render()
   {
     return (
@@ -122,7 +140,7 @@ class AnchorFailure extends React.Component
         <p>
           Your document could not be uploaded, contact your system administrator.
         </p>
-        <button onClick={onDisplayChange('anchorValidate')}>Return to Homepage</button>
+        <button onClick={this.handleClick}>Return to Homepage</button>
       </div>
     );
   }
@@ -131,13 +149,22 @@ class AnchorFailure extends React.Component
 {/* Renders on page if uploaded document was succesfully validated */}
 class ValidateSuccess extends React.Component
 {
+  constructor(props)
+  {
+    super(props);
+    this.handleClick = this.HandleClick.bind(this);
+  }
+  HandleClick()
+  {
+    this.props.OnDisplayChange('anchorValidate');
+  }
   render()
   {
     return (
       <div className="validateSuccess">
         <h1>Document is Valid</h1>
         <p>Your document is valid</p>
-        <button onClick={onDisplayChange('anchorValidate')}>Return to Homepage</button>
+        <button onClick={this.handleClick}>Return to Homepage</button>
       </div>
     );
   }
@@ -146,6 +173,15 @@ class ValidateSuccess extends React.Component
 {/* Renders on page if the uploaded document could not be validated */}
 class ValidateFailure extends React.Component
 {
+  constructor(props)
+  {
+    super(props);
+    this.handleClick = this.HandleClick.bind(this);
+  }
+  HandleClick()
+  {
+    this.props.OnDisplayChange('anchorValidate');
+  }
   render()
   {
     return (
@@ -156,7 +192,7 @@ class ValidateFailure extends React.Component
           been uploaded to the validation system, or may be a doctored form of the
           true document
         </p>
-        <button onClick={onDisplayChange('anchorValidate')}>Return to Homepage</button>
+        <button onClick={this.handleClick}>Return to Homepage</button>
       </div>
     );
   }
@@ -199,6 +235,7 @@ class Main extends React.Component
     {
       display: "anchorValidate",
     }
+    this.handleDisplayChange = this.handleDisplayChange.bind(this);
   }
 
   /* Called by sub-components. Changes the sub-component rendered by Main,
@@ -215,7 +252,7 @@ class Main extends React.Component
       case "anchorSuccess":
         return (
           <div>
-            <AnchorSuccess onDisplayChange={this.handleDisplayChange} />
+            <AnchorSuccess OnDisplayChange={this.handleDisplayChange} />
             <TechnologyExplanation />
           </div>
         );
@@ -223,7 +260,7 @@ class Main extends React.Component
       case "anchorFailure":
         return (
           <div>
-            <AnchorFailure onDisplayChange={this.handleDisplayChange} />
+            <AnchorFailure OnDisplayChange={this.handleDisplayChange} />
             <TechnologyExplanation />
           </div>
         );
@@ -231,14 +268,14 @@ class Main extends React.Component
       case "validateSuccess":
         return (
           <div>
-            <ValidateSuccess onDisplayChange={this.handleDisplayChange} />
+            <ValidateSuccess OnDisplayChange={this.handleDisplayChange} />
             <TechnologyExplanation />
           </div>);
         break;
       case "validateFailure":
         return (
           <div>
-            <ValidateFailure onDisplayChange={this.handleDisplayChange} />
+            <ValidateFailure OnDisplayChange={this.handleDisplayChange} />
             <TechnologyExplanation />
           </div>
         );
@@ -247,7 +284,7 @@ class Main extends React.Component
       default:
         return (
           <div>
-            <AnchorValidate onDisplayChange={this.handleDisplayChange} />
+            <AnchorValidate OnDisplayChange={this.handleDisplayChange} />
             <TechnologyExplanation />
           </div>);
         break;
