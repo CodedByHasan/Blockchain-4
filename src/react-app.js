@@ -1,11 +1,19 @@
 {/* axios is a library for sending AJAX requests */}
 'use strict';
 
+{/* Form for uploading documents to be validated */}
+class ValidateForm extends React.Component
+{
+
+}
 {/* Form for uploading documents to be anchored */}
-class AnchorForm extends React.Component {
-  constructor(props) {
+class AnchorForm extends React.Component
+{
+  constructor(props)
+  {
     super(props);
-    this.state = {
+    this.state =
+    {
       fileName: '',
       uploadedFile: null,
     };
@@ -15,7 +23,9 @@ class AnchorForm extends React.Component {
   }
 
   HandleChange(event)
-  { this.setState({fileName: event.target.value}); }
+  {
+    this.setState({fileName: event.target.value});
+  }
 
   /* When form is submitted, this function runs to alert the user
   that they have uploaded a file, and sends the file to the server with an
@@ -30,19 +40,23 @@ class AnchorForm extends React.Component {
     const form = new FormData();
     form.append('name', this.state.fileName);
     form.append('file', this.fileInput.current.files[0]);
-    axios.post('/api/upload', form, {
-      headers: {
+    axios.post('/api/upload', form,
+    {
+      headers:
+      {
         'Content-Type': 'multipart/form-data'
       }
     })
-    .then(res => { /* If the response status is 200, render AnchorSucess */
+    .then(res =>
+    { /* If the response status is 200, render AnchorSucess */
       console.log(res.status);
       if(res.status == '200')
       {
         this.props.OnDisplayChange('anchorSuccess');
       }
     })
-    .catch(error => { // If the response was outside of 2xx, render AnchorFailure
+    .catch(error =>
+    { // If the response was outside of 2xx, render AnchorFailure
       if(error.response)
       {
         this.props.OnDisplayChange('anchorFailure');
