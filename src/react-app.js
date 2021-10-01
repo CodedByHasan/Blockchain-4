@@ -4,7 +4,70 @@
 {/* Form for uploading documents to be validated */}
 class ValidateForm extends React.Component
 {
-
+  constructor(props)
+  {
+    super(props);
+    this.state =
+    {
+      fileId: ''
+    };
+    this.handleSubmit = this.HandleSubmit.bind(this);
+    this.handleDropDownChange = this.HandleDropDownChange.bind(this);
+    this.fileInput = React.createRef();
+  }
+  HandleSubmit(event)
+  {
+    event.preventDefault();
+    const form = new FormData();
+    form.append('id', this.state.fileId);
+    form.append('file', this.fileInput.current.files[0]);
+    axios.put('/api/verify', form,
+    {
+      headers:
+      {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+    .then(res =>
+    { /* If the response status is 200, render AnchorSucess */
+      console.log(res.status);
+      if(res.status == '200')
+      {
+        this.props.OnDisplayChange('validateSuccess');
+      }
+    })
+    .catch(error =>
+    { // If the response was outside of 2xx, render AnchorFailure
+      if(error.response)
+      {
+        this.props.OnDisplayChange('validateFailure');
+      }
+    });
+  }
+  HandleDropDownChange(event)
+  {
+    this.setState({fileId: event.target.value});
+  }
+  render()
+  {
+    return (
+      <form onSubmit={this.handleSubmit}>
+        <label>Select the file to validate against:{'\n'}
+          <select value={this.state.fileId} onChange={this.handleDropDownChange}>
+            <option value='example1'>Example1</option>
+            <option value='example2'>Example2</option>
+            <option value='example3'>Example3</option>
+          </select>
+        </label>
+        <p></p>
+        <label>Upload the file you wish to validate:{'\n'}
+          <input type="file" ref={this.fileInput} />
+        </label>
+        <p></p>
+        <button type="submit">Validate</button>
+      </form>
+    );
+  }
 }
 {/* Form for uploading documents to be anchored */}
 class AnchorForm extends React.Component
@@ -15,7 +78,6 @@ class AnchorForm extends React.Component
     this.state =
     {
       fileName: '',
-      uploadedFile: null,
     };
     this.handleChange = this.HandleChange.bind(this);
     this.handleSubmit = this.HandleSubmit.bind(this);
@@ -32,7 +94,6 @@ class AnchorForm extends React.Component
   axios request*/
   HandleSubmit(event)
   {
-    alert('A file was submitted: ' + this.state.fileName);
     event.preventDefault();
     this.setState({uploadedFile: this.fileInput.current.files[0]});
     console.log(this.fileInput.current.files[0]);
@@ -68,11 +129,14 @@ class AnchorForm extends React.Component
   {
     return (
       <form onSubmit={this.handleSubmit}>
-        <label>
-          File name:
+        <label>File name:
           <input type="text" value={this.state.fileName} onChange={this.handleChange} />
+        </label>
+        <p></p>
+        <label>File to be uploaded:
           <input type="file" ref={this.fileInput} />
         </label>
+        <p></p>
         <button type="submit">Upload</button>
       </form>
     );
@@ -92,7 +156,7 @@ class AnchorValidate  extends React.Component
           {/* Placeholder text */}
           <p>Upload a document here and enter a custom name for it. The
           document will be anchored on the blockchain for future validations.</p>
-          <AnchorForm OnDisplayChange={this.props.OnDisplayChange}/>
+          <AnchorForm OnDisplayChange={this.props.OnDisplayChange} />
         </div>
 
         <div className="validate">
@@ -100,6 +164,7 @@ class AnchorValidate  extends React.Component
           {/* Placeholder text */}
           <p>Upload a document here to validate it.</p>
           {/* Requires JS for upload functionality */}
+          <ValidateForm OnDisplayChange={this.props.OnDisplayChange} />
         </div>
       </div>
     );
@@ -151,7 +216,9 @@ class AnchorFailure extends React.Component
       <div className="anchorFailure">
         <h1>Upload Failed</h1>
         <p>
-          Your document could not be uploaded, contact your system administrator.
+          Your document could not be uploaded, make sure that you attached a
+          file and entered a name for it. If you still have problems,
+          contact your system administrator.
         </p>
         <button onClick={this.handleClick}>Return to Homepage</button>
       </div>
