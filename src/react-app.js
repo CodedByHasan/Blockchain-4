@@ -35,20 +35,19 @@ class AnchorForm extends React.Component {
         'Content-Type': 'multipart/form-data'
       }
     })
-    .then(res=> {
+    .then(res => { /* If the response status is 200, render AnchorSucess */
       console.log(res.status);
-      /* If the response status is 200, render AnchorSucess,
-      else render AnchorFailure */
       if(res.status == '200')
       {
         this.props.OnDisplayChange('anchorSuccess');
       }
-      else
+    })
+    .catch(error => { // If the response was outside of 2xx, render AnchorFailure
+      if(error.response)
       {
         this.props.OnDisplayChange('anchorFailure');
       }
     });
-
   }
   // Displays a form for uploading a file and entering a custom file name
   render()
