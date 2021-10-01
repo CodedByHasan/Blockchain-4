@@ -8,12 +8,15 @@ module.exports = {
      * @param {string} id The ID of the document to search for
      * @returns document info if found, else null
      */
-    findDocument: function (id) {
+    findDocument: function (id) 
+    {
         //Search all entries
-        for (const idx in this.hashDict) {
+        for (const idx in this.hashDict) 
+        {
             const entry = this.hashDict[idx];
             //Check if this entry matches
-            if (entry.id === id) {
+            if (entry.id === id) 
+            {
                 return entry;
             }
         }
@@ -26,7 +29,8 @@ module.exports = {
      * @param {string} hash The hash to be stored
      * @returns The generated ID of the document
      */
-    saveDocument: function (hash, name) {
+    saveDocument: function (hash, name) 
+    {
         //Generate a new unique ID
         let id = this.generateuid();
         //Add the document to the datastore
@@ -39,11 +43,13 @@ module.exports = {
      * Generates a unique id for use in the datastore
      * @returns A unique ID
      */
-    generateuid: function () {
+    generateuid: function () 
+    {
         //Generate a new ID
         let id = crypto.randomBytes(16).toString('hex');
         //Check if it is in use
-        while (this.findDocument(id) !== null) {
+        while (this.findDocument(id) !== null) 
+        {
             //Generate a new ID
             id = crypto.randomBytes(16).toString('hex');
         }
@@ -56,7 +62,8 @@ module.exports = {
      * @param {Buffer} file The file to be hashed
      * @returns Hex representation of file hash
      */
-    hashFile: function (file) {
+    hashFile: function (file) 
+    {
         //Create hashing object -> Add the file to be hashed -> Get hex representation
         return crypto.createHash('sha256').update(file).digest('hex');
     }
