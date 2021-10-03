@@ -51,6 +51,15 @@ class ValidateForm extends React.Component
   }
   render()
   {
+    // Make a get request to get the list of documents that are anchored
+    axios.get('/api/list')
+    // Then map the documents into option elements for a dropdown menu
+    .then(res =>
+    {
+      const documentList = res.data;
+      
+
+    });
     return (
       <form onSubmit={this.handleSubmit}>
         <label>Select the file to validate against:{'\n'}
