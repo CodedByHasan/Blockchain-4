@@ -1,9 +1,7 @@
-import React from 'react';
-import axios from 'axios';
-import ReactDOM from 'react-dom';
 'use strict';
 
 {/* Form for uploading documents to be validated */}
+// eslint-disable-next-line no-undef
 class ValidateForm extends React.Component
 {
     constructor(props)
@@ -16,6 +14,7 @@ class ValidateForm extends React.Component
         };
         this.handleSubmit = this.HandleSubmit.bind(this);
         this.handleDropDownChange = this.HandleDropDownChange.bind(this);
+        // eslint-disable-next-line no-undef
         this.fileInput = React.createRef();
     }
     // Submits a file to be validated against a selected existing document
@@ -25,6 +24,7 @@ class ValidateForm extends React.Component
         const form = new FormData();
         form.append('id', this.state.fileId);
         form.append('file', this.fileInput.current.files[0]);
+        // eslint-disable-next-line no-undef
         axios.put('/api/verify', form,
             {
                 headers:
@@ -57,6 +57,7 @@ class ValidateForm extends React.Component
     componentDidMount()
     {
         // Make a get request to get the list of documents that are anchored
+        // eslint-disable-next-line no-undef
         axios.get('/api/list')
         // Then map the documents into option elements for a dropdown menu
             .then(res =>
@@ -92,10 +93,12 @@ class ValidateForm extends React.Component
 }
 ValidateForm.propTypes =
 {
-    OnDisplayChange: React.PropTypes.func,
+    // eslint-disable-next-line no-undef
+    OnDisplayChange: PropTypes.func,
 };
 
 {/* Form for uploading documents to be anchored */}
+// eslint-disable-next-line no-undef
 class AnchorForm extends React.Component
 {
     constructor(props)
@@ -107,6 +110,7 @@ class AnchorForm extends React.Component
         };
         this.handleChange = this.HandleChange.bind(this);
         this.handleSubmit = this.HandleSubmit.bind(this);
+        // eslint-disable-next-line no-undef
         this.fileInput = React.createRef();
     }
 
@@ -127,6 +131,7 @@ class AnchorForm extends React.Component
         const form = new FormData();
         form.append('name', this.state.fileName);
         form.append('file', this.fileInput.current.files[0]);
+        // eslint-disable-next-line no-undef
         axios.post('/api/upload', form,
             {
                 headers:
@@ -170,11 +175,13 @@ class AnchorForm extends React.Component
 }
 AnchorForm.propTypes =
 {
-    OnDisplayChange: React.PropTypes.func,
+    // eslint-disable-next-line no-undef
+    OnDisplayChange: PropTypes.func,
 };
 
 {/* Default rendered component, allows a user to upload a document either for
 validation against an existing anchored document, or to anchor new document */}
+// eslint-disable-next-line no-undef
 class AnchorValidate  extends React.Component
 {
     render()
@@ -202,10 +209,12 @@ class AnchorValidate  extends React.Component
 }
 AnchorValidate.propTypes =
 {
-    OnDisplayChange: React.PropTypes.func,
+    // eslint-disable-next-line no-undef
+    OnDisplayChange: PropTypes.func,
 };
 
 {/* Renders on page if an uploaded document was succesfully anchored */}
+// eslint-disable-next-line no-undef
 class AnchorSuccess extends React.Component
 {
     constructor(props)
@@ -233,10 +242,12 @@ class AnchorSuccess extends React.Component
 }
 AnchorSuccess.propTypes =
 {
-    OnDisplayChange: React.PropTypes.func,
+    // eslint-disable-next-line no-undef
+    OnDisplayChange: PropTypes.func,
 };
 
 {/* Renders on page if an uploaded document could not be anchored */}
+// eslint-disable-next-line no-undef
 class AnchorFailure extends React.Component
 {
     constructor(props)
@@ -265,10 +276,12 @@ class AnchorFailure extends React.Component
 }
 AnchorFailure.propTypes =
 {
-    OnDisplayChange: React.PropTypes.func,
+    // eslint-disable-next-line no-undef
+    OnDisplayChange: PropTypes.func,
 };
 
 {/* Renders on page if uploaded document was succesfully validated */}
+// eslint-disable-next-line no-undef
 class ValidateSuccess extends React.Component
 {
     constructor(props)
@@ -293,10 +306,12 @@ class ValidateSuccess extends React.Component
 }
 ValidateSuccess.propTypes =
 {
-    OnDisplayChange: React.PropTypes.func,
+    // eslint-disable-next-line no-undef
+    OnDisplayChange: PropTypes.func,
 };
 
 {/* Renders on page if the uploaded document could not be validated */}
+// eslint-disable-next-line no-undef
 class ValidateFailure extends React.Component
 {
     constructor(props)
@@ -325,10 +340,12 @@ class ValidateFailure extends React.Component
 }
 ValidateFailure.propTypes =
 {
-    OnDisplayChange: React.PropTypes.func,
+    // eslint-disable-next-line no-undef
+    OnDisplayChange: PropTypes.func,
 };
 
 {/* A component which explains how the document anchoring system works */}
+// eslint-disable-next-line no-undef
 class TechnologyExplanation extends React.Component
 {
     render()
@@ -356,6 +373,7 @@ class TechnologyExplanation extends React.Component
 }
 
 {/* Main component which renders the correct sub-component based on its state */}
+// eslint-disable-next-line no-undef
 class Main extends React.Component
 {
     constructor(props)
@@ -420,4 +438,5 @@ class Main extends React.Component
     }
 }
 let domContainer = document.querySelector('#root');
+// eslint-disable-next-line no-undef
 ReactDOM.render(<Main />, domContainer);
