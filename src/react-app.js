@@ -28,9 +28,9 @@ class ValidateForm extends React.Component
         axios.put('/api/verify', form,
             {
                 headers:
-          {
-              'Content-Type': 'multipart/form-data'
-          }
+                {
+                    'Content-Type': 'multipart/form-data'
+                }
             })
             .then(res =>
             { /* If the response status is 200, render ValidateSuccess */
