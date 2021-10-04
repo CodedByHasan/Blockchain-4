@@ -27,10 +27,10 @@ app.post("/add_document", async (request, response) =>  {
 
 });
 
-//Route to retrieve all documents saved using the /add_document route
+//Route to retrieve all documents in the MongoDB database
 app.get("/documents", async(request, response) => {
 
-	//Collect these documents from the database
+	//Return all document in the Database
 	const documents = await documentModel.find({}); //Mongo query
 
 //Send documents to this endpoint
@@ -42,6 +42,45 @@ app.get("/documents", async(request, response) => {
 	}
 
 });
+
+//Route to retrieve all the name, hash and _id for each document
+//stored in the MongoDB database
+app.get("/documentNames", async(request, response) => {
+
+	//Query the collection and return only the document name, hash and unique id.
+	const documents = await documentModel.find({}, { documentName: 1, documentHash: 1 }); //Mongo query
+
+//Send documents to this endpoint
+	try {
+		response.send(documents);
+
+	} catch(error) {
+		response.status(500).send(error);
+	}
+
+});
+
+//Route to retrieve the document hash given the
+//document name provided by the user. Must be in
+//JSON format
+app.get("/search", async(request, response) => {
+
+	// searches based on the document name
+	// given by the user
+	var name = request.body.documentName
+	
+	//Given the document name, return its associated hash.
+	const documents = await documentModel.findOne( {documentName: name}, {documentHash: 1} );
+
+//Send documents to this endpoint
+	try {
+		response.send(documents);
+
+	} catch(error) {
+		response.status(500).send(error);
+	}
+});
+
 
 //Export these endpoints:
 module.exports = app;
