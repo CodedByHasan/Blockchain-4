@@ -11,7 +11,7 @@ var router = express.Router();
  */
 router.get('/list/', function (req, res) 
 {
-    res.json(anchor.hashDict);
+    res.json(anchor.getAllDocuments());
 });
 
 /**
