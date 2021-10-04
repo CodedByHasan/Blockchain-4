@@ -18,7 +18,8 @@
  3. Install new packages `$ npm i`
  4. Make local changes
  5. Commit regularly `$ git add file1 file2 ...`, `$ git commit -m "<message>"`
- 6. Merge `main` into your branch `$ git merge main`
- 7. Push `$ git push`
- 8. Submit Pull Request for `main` branch on github
- 9. Another team member will review your pull request
+ 6. Lint code `./lint.sh`
+ 7. Merge `main` into your branch `$ git merge main`
+ 8. Push `$ git push`
+ 9. Submit Pull Request for `main` branch on github
+ 10. Another team member will review your pull request
