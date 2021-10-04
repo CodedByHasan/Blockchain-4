@@ -9,7 +9,8 @@ class ValidateForm extends React.Component
     super(props);
     this.state =
     {
-      fileId: ''
+      fileId: '',
+      documentDropDown: []
     };
     this.handleSubmit = this.HandleSubmit.bind(this);
     this.handleDropDownChange = this.HandleDropDownChange.bind(this);
@@ -45,28 +46,36 @@ class ValidateForm extends React.Component
       }
     });
   }
+  // Changes the selected file Id whenever a dropdown option is selected
   HandleDropDownChange(event)
   {
     this.setState({fileId: event.target.value});
   }
-  render()
+  // Runs on component load to get the list of currently anchored documents
+  componentDidMount()
   {
     // Make a get request to get the list of documents that are anchored
     axios.get('/api/list')
     // Then map the documents into option elements for a dropdown menu
     .then(res =>
     {
-      const documentList = res.data;
-      
-
+      const documentJSON = res.data
+      this.setState({documentDropDown: documentJSON.map((e, key) =>
+        {
+          return (
+          <option key={key} value={e.id}>{e.name}</option>
+          )
+        }
+      )});
     });
+  }
+  render()
+  {
     return (
       <form onSubmit={this.handleSubmit}>
         <label>Select the file to validate against:{'\n'}
           <select value={this.state.fileId} onChange={this.handleDropDownChange}>
-            <option value='example1'>Example1</option>
-            <option value='example2'>Example2</option>
-            <option value='example3'>Example3</option>
+            {this.state.documentDropDown}
           </select>
         </label>
         <p></p>
