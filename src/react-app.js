@@ -135,9 +135,9 @@ class AnchorForm extends React.Component
         axios.post('/api/upload', form,
             {
                 headers:
-            {
-                'Content-Type': 'multipart/form-data'
-            }
+                {
+                    'Content-Type': 'multipart/form-data'
+                }
             })
             .then(res =>
             { /* If the response status is 200, render AnchorSucess */
