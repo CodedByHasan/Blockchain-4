@@ -329,7 +329,7 @@ class ValidateFailure extends React.Component
             <div className="validateFailure">
                 <h1>Document is Invalid</h1>
                 <p>
-                    Sorry, we couldn&apost validate your document. Your file may never have
+                    Sorry, we couldn&apos;t validate your document. Your file may never have
                     been uploaded to the validation system, or may be a doctored form of
                     the true document
                 </p>
