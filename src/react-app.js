@@ -78,6 +78,11 @@ class ValidateForm extends React.Component
                 {
                     this.setState({fileId: res.data[0].id});
                 }
+            })
+            .catch(error =>
+            {
+                //Do Something
+                console.error('There was an error getting the list of documents\n', error);
             });
     }
     render()
