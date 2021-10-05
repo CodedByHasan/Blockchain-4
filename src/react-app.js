@@ -70,11 +70,11 @@ class ValidateForm extends React.Component
                     );
                 }
                 )});
-                if (res.data.length > 0) 
+                if (res.data.length > 0)
                 {
                     this.setState({fileId: res.data[0].id});
                 }
-                if (res.data.length > 0) 
+                if (res.data.length > 0)
                 {
                     this.setState({fileId: res.data[0].id});
                 }
@@ -94,11 +94,11 @@ class ValidateForm extends React.Component
                         {this.state.documentDropDown}
                     </select>
                 </label>
-                <p></p>
+                <br></br>
                 <label>Upload the file you wish to validate:{'\n'}
                     <input type="file" ref={this.fileInput} />
                 </label>
-                <p></p>
+                <br></br>
                 <button type="submit">Validate</button>
             </form>
         );
@@ -176,11 +176,11 @@ class AnchorForm extends React.Component
                 <label>File name:
                     <input type="text" value={this.state.fileName} onChange={this.handleChange} />
                 </label>
-                <p></p>
+                <br></br>
                 <label>File to be uploaded:
                     <input type="file" ref={this.fileInput} />
                 </label>
-                <p></p>
+                <br></br>
                 <button type="submit">Upload</button>
             </form>
         );
