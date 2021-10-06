@@ -74,10 +74,6 @@ class ValidateForm extends React.Component
                 {
                     this.setState({fileId: res.data[0].id});
                 }
-                if (res.data.length > 0)
-                {
-                    this.setState({fileId: res.data[0].id});
-                }
             })
             .catch(error =>
             {
