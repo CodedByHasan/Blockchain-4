@@ -3,8 +3,9 @@ var router = express.Router();
 const axios = require('axios');
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+router.get('/', function (req, res) 
+{
+    res.render('index', { title: 'Express' });
 });
 
 module.exports = router;
