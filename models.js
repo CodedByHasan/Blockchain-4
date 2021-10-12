@@ -4,15 +4,10 @@ const mongoose = require('mongoose');
 
 
 const DocumentSchema = new mongoose.Schema({
-
-
-    documentId: {
-        type: String,  //detail this later, right now focusing on establishing connection
-        required: true,
-    },
-
+    
     documentHash: {
         type: String,
+        required: true
     },
     
     Timestamp : {
@@ -21,9 +16,11 @@ const DocumentSchema = new mongoose.Schema({
 
     documentName : {
         type: String,
+        required: true
     },
     anchorinfo : {
         type: String,
+        required: true
     },
 
 });

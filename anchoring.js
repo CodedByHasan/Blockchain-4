@@ -1,41 +1,56 @@
+const debug = require('debug')('blockchain-4:anchoring');
 const crypto = require('crypto');
-require('dotenv').config();
 //const { Client, PrivateKey, AccountCreateTransaction, AccountBalanceQuery, Hbar, TransferTransaction, FileContentsQuery, FileId, TopicCreateTransaction, TopicMessageSubmitTransaction, getMessage, TopicMessageQuery, TopicId, getAdminKey, getSubmitKey, transaction} = require('@hashgraph/sdk');
 const { Client, Hbar, TopicCreateTransaction, TopicMessageSubmitTransaction, TopicMessageQuery, TopicId} = require('@hashgraph/sdk');
+const mongoose = require('mongoose');
+const documentModel = require('./models');
 
 
-//Tempoary dictionary for storing documents
-//All refrerences to be replaces with database queries
-var hashDict = [];
+//Retrieving configuration info from .env file
+const myAccountId = process.env.MY_ACCOUNT_ID;
+const myPrivateKey = process.env.MY_PRIVATE_KEY;
+const mongoAddr = process.env.MONGO_DB_ADDR;
+
+//Check required variables exist
+if (myAccountId == null || myPrivateKey == null || mongoAddr == null ) 
+{
+    throw new Error('Environment variables MY_ACCOUNT_ID, MY_PRIVATE_KEY and MONGO_DB_ADDR must be present');
+}
+
+//Establish Hedera client
+const client = Client.forTestnet();
+client.setOperator(myAccountId, myPrivateKey);
+client.setMaxTransactionFee(new Hbar(0.1));
+
+//Connect to our MongoDB database
+mongoose.connect(mongoAddr);
+//Error checking
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error: '));
+db.once('open', function () 
+{
+    debug('Mongoose Connected successfully');
+});
 
 /**
  * Retreives the list of all documents which have been uploaded
  * @returns Array of all known documents
  */
-function getAllDocuments() 
+async function getAllDocuments() 
 {
-    return hashDict;
-}
+    //Query MongoDB for all stored documents
+    const documents = await documentModel.find({}, { documentName: 1 });
+    let allDocuments = [];
+    
+    debug(`Found ${documents.length} documents in database`);
 
-/**
- * Retreives document information from the datastore
- * @param {string} id The ID of the document to search for
- * @returns document info if found, else null
- */
-function findDocument(id) 
-{
-    //Search all entries
-    for (const idx in hashDict) 
+    //Refactoring list of documents
+    for (const document of documents)
     {
-        const entry = hashDict[idx];
-        //Check if this entry matches
-        if (entry.id === id) 
-        {
-            return entry;
-        }
+        allDocuments.push({name: document.documentName, id: document._id});
     }
-    //If none were found, return null
-    return null;
+
+    return allDocuments;
 }
 
 /**
@@ -43,37 +58,25 @@ function findDocument(id)
  * @param {string} hash The hash to be stored
  * @returns The generated ID of the document
  */
-function saveDocument(hash, name) 
+async function saveDocument(hash, name) 
 {
-    //Generate a new unique ID
-    let id = generateuid();
+    //Submit hash to Hedra
+    const topicId = await submitDocumentHedra(hash, name);
+    debug(`Hash ${hash} sent to Hedra, topicID ${topicId}`);
     //Add the document to the datastore
-    hashDict.push({ name: name, id: id, hash: hash });
+    let document = new  documentModel({anchorinfo:topicId, documentName: name, Timestamp:Date.now(), documentHash: hash});
+    await document.save();	//Mongo query
+    debug(`Document stored in database, ID ${document._id}`);
     //Return the generated ID
-    return id;
+    return document._id;
 }
-
-//retrieving account info from .env file
-const myAccountId = process.env.MY_ACCOUNT_ID;
-const myPrivateKey = process.env.MY_PRIVATE_KEY;
-
-//checks account exist
-if (myAccountId == null || myPrivateKey == null ) 
-{
-    throw new Error('Environment variables myAccountId and myPrivateKey must be present');
-}
-
-//establishes hedera client
-const client = Client.forTestnet();
-client.setOperator(myAccountId, myPrivateKey);
-client.setMaxTransactionFee(new Hbar(0.1));
 
 /**
  * Submits a document into the blockchain
  * @param {string} hash The hash to be submitted, name of document
  * @returns The topicID of the transaction
  */
-async function submitDocument(hash, name)
+async function submitDocumentHedra(hash, name)
 {
     //Create the transaction
     const transaction =  new TopicCreateTransaction().setTopicMemo(name);
@@ -84,8 +87,6 @@ async function submitDocument(hash, name)
     //Request the receipt of the transaction
     const receipt =  await txResponse.getReceipt(client);
 
-    console.log(receipt);
-
     new TopicMessageSubmitTransaction({
         topicId: receipt.topicId,
         message: hash
@@ -95,47 +96,65 @@ async function submitDocument(hash, name)
 }
 
 /**
+ * Retreives document information from the datastore
+ * @param {string} id The ID of the document to search for
+ * @returns document info if found, else null
+ */
+async function findDocument(id) 
+{
+    //Search database
+    try 
+    {
+        const document = await documentModel.findOne({_id: id}, {anchorinfo: 1});
+    
+        debug(`Document Found: ${id}, Hedra Topic ID: ${document.anchorinfo}`);
+    
+        let retrievedHash = await retrieveHashHedra(document.anchorinfo);
+        debug('retrievedHash:', retrievedHash);
+        return retrievedHash;
+    }
+    catch (error) 
+    {
+        debug('Error retreiving document:', id);
+        return null;
+    }
+}
+
+/**
  * retrieves the hash of a document from the blockchain
  * @param {string} topic id of the document
  * @returns The topicID of the transaction
  */
-async function retrieveHash(topicId, callback) 
+function retrieveHashHedra(topicId) 
 {   
-    //created topic Id object with num passed into function
-    const topicNum = topicId.slice(4);
-    const newTopicId = new TopicId(0,0,topicNum);
-
-    //subscribes to hedera mirror node and returns first message in topic
-    new TopicMessageQuery()
-        .setTopicId(newTopicId)
-        .setStartTime(0)
-        .setLimit(1)
-        .subscribe(
-            client,
-            (message) => 
-            {
-                let hash = Buffer.from(message.contents, 'utf8').toString();
-                callback(hash);
-            }
-        );
-}
-
-/**
- * Generates a unique id for use in the datastore
- * @returns A unique ID
- */
-function generateuid() 
-{
-    //Generate a new ID
-    let id = crypto.randomBytes(16).toString('hex');
-    //Check if it is in use
-    while (findDocument(id) !== null) 
+    return new Promise((resolve, reject) =>
     {
-        //Generate a new ID
-        id = crypto.randomBytes(16).toString('hex');
-    }
-    //Return the ID
-    return id;
+        //created topic Id object with num passed into function
+        const topicNum = topicId.slice(4);
+        const newTopicId = new TopicId(0, 0, topicNum);
+
+        //subscribes to hedera mirror node and returns first message in topic
+        try 
+        {
+            new TopicMessageQuery()
+                .setTopicId(newTopicId)
+                .setStartTime(0)
+                .setLimit(1)
+                .subscribe(
+                    client,
+                    (message) => 
+                    {
+                        let hash = Buffer.from(message.contents, 'utf8').toString();
+                        resolve(hash);
+                    }
+                );
+        }
+        catch (error) 
+        {
+            reject(error);
+        }
+        
+    });
 }
 
 /**
@@ -154,7 +173,5 @@ module.exports = {
     getAllDocuments: getAllDocuments,
     findDocument: findDocument,
     saveDocument: saveDocument,
-    hashFile: hashFile,
-    submitDocument: submitDocument,
-    retrieveHash: retrieveHash
+    hashFile: hashFile
 };
