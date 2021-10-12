@@ -29,7 +29,7 @@ router.post('/upload/', upload.any(), async function (req, res)
 
     let topicId = await anchor.submitDocument(hash, req.body.name);
     await console.log('topic id is:' + topicId);
-    
+
     //Save the document in the datastore and keep track of it's ID
     let id = anchor.saveDocument(hash, req.body.name);
 
@@ -60,12 +60,14 @@ router.put('/verify/', upload.any(), async function (req, res)
     //Hash the file
     let hash = anchor.hashFile(req.files[0].buffer);
 
-    anchor.retrieveHash("0.0.2812198", function(retrievedHash) {    
+    anchor.retrieveHash('0.0.2812198', function (retrievedHash) 
+    {    
         res.json({
-        verifySuccess: hash === retrievedHash, //Check if the hashes differ
-        uploadedHash: hash,
-        storedHash: retrievedHash
-    });} );
+            verifySuccess: hash === retrievedHash, //Check if the hashes differ
+            uploadedHash: hash,
+            storedHash: retrievedHash
+        });
+    });
 
 });
 
