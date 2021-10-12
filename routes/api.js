@@ -60,7 +60,9 @@ router.put('/verify/', upload.any(), async function (req, res)
     //Hash the file
     let hash = anchor.hashFile(req.files[0].buffer);
 
-    anchor.retrieveHash('0.0.2812198', function (retrievedHash) 
+    //Change this to retrieve the topic ID from the database
+    let topicId = '0.0.2812198';
+    anchor.retrieveHash(topicId, function (retrievedHash) 
     {    
         res.json({
             verifySuccess: hash === retrievedHash, //Check if the hashes differ
