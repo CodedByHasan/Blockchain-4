@@ -1,5 +1,5 @@
 {
-    "openapi": "3.0.3",
+    "openapi": "3.0.4",
     "info": {
         "title": "Blockchain-4",
         "description": "Document Anchoring using Blockchain",
@@ -60,7 +60,7 @@
                                         "value": [
                                             {
                                                 "name": "example1",
-                                                "id": "001"
+                                                "id": "61442b16c1cafbeea4061f70"
                                             }
                                         ]
                                     },
@@ -69,15 +69,15 @@
                                         "value": [
                                             {
                                                 "name": "example1",
-                                                "id": "001"
+                                                "id": "61442b16c1cafbeea4061f70"
                                             },
                                             {
                                                 "name": "example2",
-                                                "id": "002"
+                                                "id": "615a9725bc942a6524043115"
                                             },
                                             {
                                                 "name": "example3",
-                                                "id": "003"
+                                                "id": "615a9733bc942a6524043117"
                                             }
                                         ]
                                     }
@@ -145,16 +145,13 @@
                                     "success": {
                                         "summary": "Document Upload Success",
                                         "value": {
-                                            "id": "001",
+                                            "id": "61442b16c1cafbeea4061f70",
                                             "hash": "ac0b17dac471725dcd03e16c895cb27c0ccfbf9bc0cc58a14c857c662532e6a6"
                                         }
                                     }
                                 }
                             }
                         }
-                    },
-                    "413": {
-                        "description": "The uploaded document was too large to be processed"
                     }
                 }
             }
