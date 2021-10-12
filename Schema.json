@@ -1,0 +1,8 @@
+{
+    "documentId": "ObjectId()",
+    "documentHash":"hash",
+    "Timestamp":"int",
+    "documentName":"name",
+    "anchorinfo":"string"
+
+}
