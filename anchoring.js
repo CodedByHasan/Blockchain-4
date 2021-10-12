@@ -1,4 +1,8 @@
 const crypto = require('crypto');
+require('dotenv').config();
+//const { Client, PrivateKey, AccountCreateTransaction, AccountBalanceQuery, Hbar, TransferTransaction, FileContentsQuery, FileId, TopicCreateTransaction, TopicMessageSubmitTransaction, getMessage, TopicMessageQuery, TopicId, getAdminKey, getSubmitKey, transaction} = require('@hashgraph/sdk');
+const { Client, Hbar, TopicCreateTransaction, TopicMessageSubmitTransaction, TopicMessageQuery, TopicId} = require('@hashgraph/sdk');
+
 
 //Tempoary dictionary for storing documents
 //All refrerences to be replaces with database queries
@@ -49,6 +53,73 @@ function saveDocument(hash, name)
     return id;
 }
 
+//retrieving account info from .env file
+const myAccountId = process.env.MY_ACCOUNT_ID;
+const myPrivateKey = process.env.MY_PRIVATE_KEY;
+
+//checks account exist
+if (myAccountId == null || myPrivateKey == null ) 
+{
+    throw new Error('Environment variables myAccountId and myPrivateKey must be present');
+}
+
+//establishes hedera client
+const client = Client.forTestnet();
+client.setOperator(myAccountId, myPrivateKey);
+client.setMaxTransactionFee(new Hbar(0.1));
+
+/**
+ * Submits a document into the blockchain
+ * @param {string} hash The hash to be submitted, name of document
+ * @returns The topicID of the transaction
+ */
+async function submitDocument(hash, name)
+{
+    //Create the transaction
+    const transaction =  new TopicCreateTransaction().setTopicMemo(name);
+
+    //Sign with the client operator private key and submit the transaction to a Hedera network
+    const txResponse =  await transaction.execute(client);
+
+    //Request the receipt of the transaction
+    const receipt =  await txResponse.getReceipt(client);
+
+    console.log(receipt);
+
+    new TopicMessageSubmitTransaction({
+        topicId: receipt.topicId,
+        message: hash
+    }).execute(client); 
+
+    return receipt.topicId;
+}
+
+/**
+ * retrieves the hash of a document from the blockchain
+ * @param {string} topic id of the document
+ * @returns The topicID of the transaction
+ */
+async function retrieveHash(topicId, callback) 
+{   
+    //created topic Id object with num passed into function
+    const topicNum = topicId.slice(4);
+    const newTopicId = new TopicId(0,0,topicNum);
+
+    //subscribes to hedera mirror node and returns first message in topic
+    new TopicMessageQuery()
+        .setTopicId(newTopicId)
+        .setStartTime(0)
+        .setLimit(1)
+        .subscribe(
+            client,
+            (message) => 
+            {
+                let hash = Buffer.from(message.contents, 'utf8').toString();
+                callback(hash);
+            }
+        );
+}
+
 /**
  * Generates a unique id for use in the datastore
  * @returns A unique ID
@@ -83,5 +154,7 @@ module.exports = {
     getAllDocuments: getAllDocuments,
     findDocument: findDocument,
     saveDocument: saveDocument,
-    hashFile: hashFile
+    hashFile: hashFile,
+    submitDocument: submitDocument,
+    retrieveHash: retrieveHash
 };
