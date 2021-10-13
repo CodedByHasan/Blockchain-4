@@ -135,3 +135,6 @@ dist
 
 # TernJS port file
 .tern-port
+
+# React scripts translated from JSX in src
+/public/react-scripts
