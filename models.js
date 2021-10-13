@@ -1,33 +1,30 @@
 //Creating the schema
 
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 
 const DocumentSchema = new mongoose.Schema({
-
-
-    documentId: {
-    	type: String,  //detail this later, right now focusing on establishing connection
-    	required: true,
-    },
-
+    
     documentHash: {
-    	type: String,	
+        type: String,
+        required: true
     },
     
     Timestamp : {
-    	type: String,
+        type: String,
     },
 
     documentName : {
-    	type: String,
+        type: String,
+        required: true
     },
     anchorinfo : {
-    	type: String,
+        type: String,
+        required: true
     },
 
 });
 
 //Export the schema using these lines:
-const Document = mongoose.model("Document", DocumentSchema);
+const Document = mongoose.model('Document', DocumentSchema);
 module.exports = Document;

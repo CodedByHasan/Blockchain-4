@@ -66,7 +66,7 @@ class ValidateForm extends React.Component
                 this.setState({documentDropDown: documentJSON.map((e, key) =>
                 {
                     return (
-                        <option key={key} value={e.id}>{e.name}</option>
+                        <option key={key} value={e.id}>[{e.id}] {e.name}</option>
                     );
                 }
                 )});

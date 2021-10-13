@@ -2,83 +2,102 @@
 
 
 //Load express and the schema created before
-const express = require("express");
-const documentModel = require("./models");
+const express = require('express');
+const documentModel = require('./models');
 const app = express();
 
 
 
 //A route to add a new document to the database
-app.post("/add_document", async (request, response) =>  {
+app.post('/add_document', async (request, response) =>  
+{
 
-	//Parsing the document to be saved to the database
-	const document = new  documentModel(request.body);
+    //Parsing the document to be saved to the database
+    let document = new  documentModel({anchorinfo:'0.0.22', documentName: 'my fancy file', Timestamp:Date.now(), documentHash: 'deafdbeef'});
 
-	//This helps save the object to the database:
-	try {
-		
-		await document.save();	//Mongo query
-		response.send(document);
+    //This helps save the object to the database:
+    try 
+    {
+        console.log('1', document);
+        document._id=document.ObjectId();
+        console.log('2', document);
+        await document.save();	//Mongo query
+        console.log('3', document);
+        response.send(document);
 
-	} catch(error) {
-		response.status(500).send(error);
-	}
+    }
+    catch(error) 
+    {
+        response.status(500).send(error);
+    }
 
 
 });
 
 //Route to retrieve all documents in the MongoDB database
-app.get("/documents", async(request, response) => {
+app.get('/documents', async (request, response) => 
+{
 
-	//Return all document in the Database
-	const documents = await documentModel.find({}); //Mongo query
+    //Return all document in the Database
+    const documents = await documentModel.find({}); //Mongo query
 
-//Send documents to this endpoint
-	try {
-		response.send(documents);
+    //Send documents to this endpoint
+    try 
+    {
+        response.send(documents);
 
-	} catch(error) {
-		response.status(500).send(error);
-	}
+    }
+    catch(error) 
+    {
+        response.status(500).send(error);
+    }
 
 });
 
 //Route to retrieve all the name, hash and _id for each document
 //stored in the MongoDB database
-app.get("/documentNames", async(request, response) => {
+app.get('/documentNames', async (request, response) => 
+{
 
-	//Query the collection and return only the document name, hash and unique id.
-	const documents = await documentModel.find({}, { documentName: 1, documentHash: 1 }); //Mongo query
+    //Query the collection and return only the document name, hash and unique id.
+    const documents = await documentModel.find({}, { documentName: 1, documentHash: 1 }); //Mongo query
 
-//Send documents to this endpoint
-	try {
-		response.send(documents);
+    //Send documents to this endpoint
+    try 
+    {
+        response.send(documents);
 
-	} catch(error) {
-		response.status(500).send(error);
-	}
+    }
+    catch(error) 
+    {
+        response.status(500).send(error);
+    }
 
 });
 
 //Route to retrieve the document hash given the
 //document name provided by the user. Must be in
 //JSON format
-app.get("/search", async(request, response) => {
+app.get('/search', async (request, response) => 
+{
 
-	// searches based on the document name
-	// given by the user
-	var name = request.body.documentName
+    // searches based on the document name
+    // given by the user
+    var name = request.body.documentName;
 	
-	//Given the document name, return its associated hash.
-	const documents = await documentModel.findOne( {documentName: name}, {documentHash: 1} );
+    //Given the document name, return its associated hash.
+    const documents = await documentModel.findOne( {_id: name}, {anchorinfo: 1} );
 
-//Send documents to this endpoint
-	try {
-		response.send(documents);
+    //Send documents to this endpoint
+    try 
+    {
+        response.send(documents);
 
-	} catch(error) {
-		response.status(500).send(error);
-	}
+    }
+    catch(error) 
+    {
+        response.status(500).send(error);
+    }
 });
 
 
