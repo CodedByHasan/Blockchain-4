@@ -4,21 +4,23 @@ const mongoose = require('mongoose');
 
 
 const DocumentSchema = new mongoose.Schema({
-    
+    // Document Hash done by backend server
     documentHash: {
         type: String,
         required: true
     },
-    
-    Timestamp : {
+    // Time stamp retrieved from backend server
+    timeStamp : {
         type: String,
+        required: true
     },
-
+    // Name of the document
     documentName : {
         type: String,
         required: true
     },
-    anchorinfo : {
+    // Hedera Topic ID
+    topicId : {
         type: String,
         required: true
     },

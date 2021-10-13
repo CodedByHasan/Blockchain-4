@@ -13,13 +13,13 @@ app.post('/add_document', async (request, response) =>
 {
 
     //Parsing the document to be saved to the database
-    let document = new  documentModel({anchorinfo:'0.0.22', documentName: 'my fancy file', Timestamp:Date.now(), documentHash: 'deafdbeef'});
+    let document = new  documentModel({topicId:'0.0.22', documentName: 'my fancy file', timeStamp:Date.now(), documentHash: 'deafdbeef'});
 
     //This helps save the object to the database:
     try 
     {
-        console.log('1', document);
-        document._id=document.ObjectId();
+        // console.log('1', document);
+        // document._id=document.ObjectId();
         console.log('2', document);
         await document.save();	//Mongo query
         console.log('3', document);
@@ -30,8 +30,6 @@ app.post('/add_document', async (request, response) =>
     {
         response.status(500).send(error);
     }
-
-
 });
 
 //Route to retrieve all documents in the MongoDB database

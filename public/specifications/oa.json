@@ -3,7 +3,7 @@
     "info": {
         "title": "Blockchain-4",
         "description": "Document Anchoring using Blockchain",
-        "version": "1.0.4"
+        "version": "1.0.5"
     },
     "servers": [
         {
@@ -36,14 +36,14 @@
                                     "items": {
                                         "type": "object",
                                         "required": [
-                                            "name",
-                                            "id"
+                                            "documentName",
+                                            "_id"
                                         ],
                                         "properties": {
-                                            "name": {
+                                            "documentName": {
                                                 "type": "string"
                                             },
-                                            "id": {
+                                            "_id": {
                                                 "type": "string"
                                             }
                                         },
@@ -59,8 +59,8 @@
                                         "summary": "One document available",
                                         "value": [
                                             {
-                                                "name": "example1",
-                                                "id": "61442b16c1cafbeea4061f70"
+                                                "documentName": "example1",
+                                                "_id": "61442b16c1cafbeea4061f70"
                                             }
                                         ]
                                     },
@@ -68,16 +68,16 @@
                                         "summary": "Multiple documents available",
                                         "value": [
                                             {
-                                                "name": "example1",
-                                                "id": "61442b16c1cafbeea4061f70"
+                                                "documentName": "example1",
+                                                "_id": "61442b16c1cafbeea4061f70"
                                             },
                                             {
-                                                "name": "example2",
-                                                "id": "615a9725bc942a6524043115"
+                                                "documentName": "example2",
+                                                "_id": "615a9725bc942a6524043115"
                                             },
                                             {
-                                                "name": "example3",
-                                                "id": "615a9733bc942a6524043117"
+                                                "documentName": "example3",
+                                                "_id": "615a9733bc942a6524043117"
                                             }
                                         ]
                                     }

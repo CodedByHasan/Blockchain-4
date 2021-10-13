@@ -40,17 +40,8 @@ async function getAllDocuments()
 {
     //Query MongoDB for all stored documents
     const documents = await documentModel.find({}, { documentName: 1 });
-    let allDocuments = [];
-    
     debug(`Found ${documents.length} documents in database`);
-
-    //Refactoring list of documents
-    for (const document of documents)
-    {
-        allDocuments.push({name: document.documentName, id: document._id});
-    }
-
-    return allDocuments;
+    return documents;
 }
 
 /**
@@ -64,7 +55,12 @@ async function saveDocument(hash, name)
     const topicId = await submitDocumentHedra(hash, name);
     debug(`Hash ${hash} sent to Hedra, topicID ${topicId}`);
     //Add the document to the datastore
-    let document = new  documentModel({anchorinfo:topicId, documentName: name, Timestamp:Date.now(), documentHash: hash});
+    let document = new  documentModel({
+        topicId:topicId, 
+        documentName: name, 
+        timeStamp:Date.now(), 
+        documentHash: hash}
+    );
     await document.save();	//Mongo query
     debug(`Document stored in database, ID ${document._id}`);
     //Return the generated ID
@@ -105,11 +101,11 @@ async function findDocument(id)
     //Search database
     try 
     {
-        const document = await documentModel.findOne({_id: id}, {anchorinfo: 1});
+        const document = await documentModel.findOne({_id: id}, {topicId: 1});
     
-        debug(`Document Found: ${id}, Hedra Topic ID: ${document.anchorinfo}`);
+        debug(`Document Found: ${id}, Hedra Topic ID: ${document.topicId}`);
     
-        let retrievedHash = await retrieveHashHedra(document.anchorinfo);
+        let retrievedHash = await retrieveHashHedra(document.topicId);
         debug('retrievedHash:', retrievedHash);
         return retrievedHash;
     }
