@@ -8,7 +8,7 @@
 
 ## Running
  - Start the JSX pre-processor in the background `npx babel --watch src --out-dir ./public/react-scripts --presets react-app/prod &`
- - To run on the default port, use `$ npm start`
+ - To run on the default port, use `$ npm run mon`
  - If you need to specify a port, use `$ PORT=80 npm start`
  - Enter this URL in your browser: `http://localhost:3000`
 
@@ -18,7 +18,8 @@
  3. Install new packages `$ npm i`
  4. Make local changes
  5. Commit regularly `$ git add file1 file2 ...`, `$ git commit -m "<message>"`
- 6. Merge `main` into your branch `$ git merge main`
- 7. Push `$ git push`
- 8. Submit Pull Request for `main` branch on github
- 9. Another team member will review your pull request
+ 6. Lint code `./lint.sh`
+ 7. Merge `main` into your branch `$ git merge main`
+ 8. Push `$ git push`
+ 9. Submit Pull Request for `main` branch on github
+ 10. Another team member will review your pull request

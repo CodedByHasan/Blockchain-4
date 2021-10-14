@@ -4,7 +4,9 @@
 <head>
   <title>Blockchain Document Validator</title>
   <link rel="stylesheet" href="/stylesheets/style.css">
-
+  <!-- Load supporting libraries for react -->
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://unpkg.com/prop-types@15.6/prop-types.js"></script>
   <!-- Load React. -->
   <!-- Note: when deploying, replace "development.js" with "production.min.js". -->
   <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
@@ -13,23 +15,11 @@
 
 <body>
   <div id="root"></div>
-
-  <div>
-    <h1>PDF Upload</h1>
-    <form id="my-up-pdf" target="stop" method="POST" action="/api/upload" encType="multipart/form-data">
-      <input type="text" name="name" />
-      <input type="file" name="document" />
-    </form>
-    <iframe name="stop" style="display: none;"></iframe>
-    <button onClick="document.querySelector('#my-up-pdf').submit();">upload</button>
-  </div>
-
-  <!-- Load React component. -->
-  <script src="/react-scripts/react-app.js"></script>
-
   <!-- Not sure what we want here just yet -->
   <footer>
   </footer>
+  <!-- Load React component. -->
+  <script src="/react-scripts/react-app.js"></script>
 </body>
 
 </html>

@@ -1,18 +1,39 @@
 {
   "name": "blockchain-4",
-  "version": "0.0.0",
+  "description": "Document Anchoring using Blockchain",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
     "mon": "nodemon ./bin/www/"
   },
   "dependencies": {
+    "@hashgraph/sdk": "^2.0.13",
+    "axios": "^0.21.4",
     "babel-cli": "^6.26.0",
     "babel-preset-react-app": "^3.1.2",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
-    "express": "~4.16.1",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "form-data": "^4.0.0",
+    "mongoose": "^6.0.5",
     "morgan": "~1.9.1",
-    "nodemon": "^2.0.12"
-  }
+    "multer": "^1.4.3",
+    "prompt-sync": "^4.2.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-plugin-react": "^7.26.1",
+    "nodemon": "^2.0.12",
+    "supports-color": "^9.0.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CodedByHasan/Blockchain-4.git"
+  },
+  "bugs": {
+    "url": "https://github.com/CodedByHasan/Blockchain-4/issues"
+  },
+  "homepage": "https://github.com/CodedByHasan/Blockchain-4#readme"
 }
