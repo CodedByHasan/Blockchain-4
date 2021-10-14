@@ -1,6 +1,6 @@
 {
     "ignore": [
-        "public/*"
+        "**/public/**"
     ],
     "watch": [
         ".",

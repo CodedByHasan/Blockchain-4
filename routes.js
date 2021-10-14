@@ -13,13 +13,16 @@ app.post('/add_document', async (request, response) =>
 {
 
     //Parsing the document to be saved to the database
-    const document = new  documentModel(request.body);
+    let document = new  documentModel({topicId:'0.0.22', documentName: 'my fancy file', timeStamp:Date.now(), documentHash: 'deafdbeef'});
 
     //This helps save the object to the database:
     try 
     {
-		
+        // console.log('1', document);
+        // document._id=document.ObjectId();
+        console.log('2', document);
         await document.save();	//Mongo query
+        console.log('3', document);
         response.send(document);
 
     }
@@ -27,8 +30,6 @@ app.post('/add_document', async (request, response) =>
     {
         response.status(500).send(error);
     }
-
-
 });
 
 //Route to retrieve all documents in the MongoDB database
@@ -83,7 +84,7 @@ app.get('/search', async (request, response) =>
     var name = request.body.documentName;
 	
     //Given the document name, return its associated hash.
-    const documents = await documentModel.findOne( {documentName: name}, {documentHash: 1} );
+    const documents = await documentModel.findOne( {_id: name}, {anchorinfo: 1} );
 
     //Send documents to this endpoint
     try 
