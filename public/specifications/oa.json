@@ -1,9 +1,9 @@
 {
-    "openapi": "3.0.4",
+    "openapi": "3.0.3",
     "info": {
         "title": "Blockchain-4",
         "description": "Document Anchoring using Blockchain",
-        "version": "1.0.5"
+        "version": "1.0.6"
     },
     "servers": [
         {
