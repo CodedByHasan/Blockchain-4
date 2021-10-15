@@ -13,7 +13,7 @@
   <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css"/>
-  
+
 </head>
 
 <body>
@@ -76,7 +76,9 @@
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#anchormod">
                                   Anchør
                                 </button>
-                                <a href="#" class="btn primary"></i> Validate</a>
+                                <button type="button" class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#validatemod" onclick="ReRenderValidate()">
+                                  Validate
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -100,7 +102,7 @@
               <div class="col-12">
                   <h1 class="text-center">How does it work?</h1>
                     <p class="">This validation system utilises the Hedera Hasgraph blockchain to validate documents, allowing users to be sure that their file is the true, undoctored form of the document.</p>
-                    <p>Upon a document being uploaded, the system stores the document and generates a Hedera hash from it. It then uses Hedera APIs to anchor this hash on the blockchain. In the future, when the same file is uploaded to the validation section, the system generates a hash again, and checks if this same hash exists on the blockchain. 
+                    <p>Upon a document being uploaded, the system stores the document and generates a Hedera hash from it. It then uses Hedera APIs to anchor this hash on the blockchain. In the future, when the same file is uploaded to the validation section, the system generates a hash again, and checks if this same hash exists on the blockchain.
                       If so, the document is valid. If not, the file has either not been uploaded to the system before, or the document is invalid.</p>
               </div>
           </div>
@@ -112,7 +114,7 @@
             <div class="col-12">
                 <h1 class="text-center">FAQ</h1>
         <h2 class="text-center mb-4">Frequently Asked Questions</h2>
-              
+
         <div class="accordion w-100" id="basicAccordion">
           <div class="accordion-item">
             <h2 class="accordion-header" id="headingOne">
@@ -177,21 +179,37 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="anchormod">Modal title</h5>
+        <h5 class="modal-title" id="anchormod">Anchor</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
+      <div class="modal-body" id="anchormodbody">
         ...
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
 </div>
 
-
+<!-- VALIDATE MODAL-->
+<!-- IDK WHY THIS BIT ISNT WORKING, THE BOOTSTRAP EXAMPLE CODE IS LITERALLY THE SAME -->
+<div class="modal fade" id="validatemod" tabindex="-1" aria-labelledby="anchormod" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="anchormod">Validate</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="validatemodbody">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 
