@@ -39,7 +39,7 @@ class ValidateForm extends React.Component
                 console.log(res.data);
                 if(res.status === 200 && 'verifySuccess' in res.data)
                 {
-                    if(res.data.verifySuccess) 
+                    if(res.data.verifySuccess)
                     {
                         this.props.OnDisplayChange('validateSuccess');
                     }
@@ -69,7 +69,7 @@ class ValidateForm extends React.Component
         // Make a get request to get the list of documents that are anchored
         if(reRenderValidate == true)
         {
-            console.log('did mount');
+            //console.log('did mount');
             // eslint-disable-next-line no-undef
             axios.get('/api/list')
             // Then map the documents into option elements for a dropdown menu
@@ -102,7 +102,7 @@ class ValidateForm extends React.Component
         // Make a get request to get the list of documents that are anchored
         if (reRenderValidate == true)
         {
-            console.log("did update");
+            //console.log("did update");
             reRenderValidate = false;
             // eslint-disable-next-line no-undef
             axios.get('/api/list')
@@ -559,7 +559,7 @@ class ValidateWrapper extends React.Component
 
 function ReRenderValidate()
 {
-    console.log("Rerender set to true");
+    //console.log("Rerender set to true");
     reRenderValidate = true;
     let validateContainer = document.querySelector('#validatemodbody');
     // eslint-disable-next-line no-undef
