@@ -143,7 +143,7 @@ class ValidateForm extends React.Component
                     <input type="file" ref={this.fileInput} />
                 </label>
                 <br></br>
-                <button type="submit">Validate</button>
+                <button type="submit" className="btn btn-outline-info text-center" >Validate</button>
             </form>
         );
     }
@@ -225,7 +225,7 @@ class AnchorForm extends React.Component
                     <input type="file" ref={this.fileInput} />
                 </label>
                 <br></br>
-                <button type="submit">Upload</button>
+                <button type="submit" className="btn btn-outline-info">Upload</button>
             </form>
         );
     }
@@ -292,7 +292,7 @@ class AnchorSuccess extends React.Component
                     Your document has been successfully uploaded, future attempts to
                     validate this file will be successful.
                 </p>
-                <button onClick={this.handleClick}>Anchor Another Document</button>
+                <button onClick={this.handleClick} className="btn btn-outline-info" >Anchor Another Document</button>
             </div>
         );
     }
@@ -326,7 +326,7 @@ class AnchorFailure extends React.Component
                     file and entered a name for it. If you still have problems,
                     contact your system administrator.
                 </p>
-                <button onClick={this.handleClick}>Try Again</button>
+                <button onClick={this.handleClick} className="btn btn-outline-info" >Try Again</button>
             </div>
         );
     }
@@ -356,7 +356,7 @@ class ValidateSuccess extends React.Component
             <div className="validateSuccess">
                 <h6>Validation Successful</h6>
                 <p>Your document is valid</p>
-                <button onClick={this.handleClick}>Validate Another Document</button>
+                <button onClick={this.handleClick} className="btn btn-outline-info" >Validate Another Document</button>
             </div>
         );
     }
@@ -390,7 +390,7 @@ class ValidateFailure extends React.Component
                     been uploaded to the validation system, or may be a doctored form of
                     the true document
                 </p>
-                <button onClick={this.handleClick}>Try Again</button>
+                <button onClick={this.handleClick} className="btn btn-outline-info" >Try Again</button>
             </div>
         );
     }
@@ -420,7 +420,7 @@ class ValidateError extends React.Component
             <div className="ValidateError">
                 <h1>Validation Error</h1>
                 <p>There was an error validating your document</p>
-                <button onClick={this.handleClick}>Return to Homepage</button>
+                <button onClick={this.handleClick} className="btn btn-outline-info" >Return to Homepage</button>
             </div>
         );
     }
