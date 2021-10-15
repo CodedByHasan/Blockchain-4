@@ -50,12 +50,12 @@ class ValidateForm extends React.Component
                 }
                 else
                 {
-                    this.props.OnDisplayChange('ValidateError');
+                    this.props.OnDisplayChange('validateError');
                 }
             })
             .catch(() =>
             { // If the response was outside of 2xx, render ValidateError
-                this.props.OnDisplayChange('ValidateError');
+                this.props.OnDisplayChange('validateError');
             });
     }
     // Changes the selected file Id whenever a dropdown option is selected
@@ -417,8 +417,8 @@ class ValidateError extends React.Component
     render()
     {
         return (
-            <div className="ValidateError">
-                <h1>Validation Error</h1>
+            <div className="validateError">
+                <h6>Validation Error</h6>
                 <p>There was an error validating your document</p>
                 <button onClick={this.handleClick}>Return to Homepage</button>
             </div>
@@ -546,6 +546,12 @@ class ValidateWrapper extends React.Component
                     <ValidateFailure OnDisplayChange={this.handleDisplayChange} />
                 </div>
             );
+        case 'validateError':
+            return (
+                <div>
+                    <ValidateError OnDisplayChange={this.handleDisplayChange} />
+                </div>
+            )
             //  Default state is displaying a validate and anchor div side by side
         default:
             return (
