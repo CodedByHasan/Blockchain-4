@@ -11,15 +11,208 @@
   <!-- Note: when deploying, replace "development.js" with "production.min.js". -->
   <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css"/>
+  
 </head>
 
 <body>
   <div id="root"></div>
-  <!-- Not sure what we want here just yet -->
-  <footer>
-  </footer>
+  <!-- Start Header Area -->
+  <header class="header">
+    <div class="navbar-area">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-12">
+                    <nav class="navbar navbar-expand-lg">
+                        <a class="navbar-brand logo" href="/" style="color:white;font:roboto">
+                           <strong> ANCHØR</strong>
+                        </a>
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="toggler-icon"></span>
+                            <span class="toggler-icon"></span>
+                            <span class="toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse sub-menu-bar" id="navbarSupportedContent">
+                            <ul id="nav" class="navbar-nav me-auto">
+                                <li class="nav-item">
+                                    <a class="page-scroll" href="#features">How does it work?</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="page-scroll" href="#download">FAQ</a>
+                                </li>
+
+                            </ul>
+                        </div>
+                        <!-- navbar collapse div ends here -->
+                    </nav>
+                    <!-- navbar ends here  -->
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- navbar area Ends -->
+</header>
+<!-- Header Area Ends -->
+
+<!-- Start Hero Area -->
+<section id="hero-area" class="hero-area">
+    <!-- Single Slider -->
+    <div class="hero-inner">
+        <div class="container">
+            <div class="row ">
+                <div class="col-lg-6 co-12">
+                    <div class="home-slider">
+                        <div class="hero-text">
+                            <h5></h5>
+                            <h1>Check the Integirty<br>of your documents with <br>the <strong>ANCHØR</strong> platform</h1>
+                            <p>Lorem Ipsum is simply dummy text of the
+                                printing and typesetting <br> industry. Lorem Ipsum has been the industry's standard
+                                <br>dummy text ever since.</p>
+                            <div>
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#anchormod">
+                                  Anchør
+                                </button>
+                                <a href="#" class="btn primary"></i> Validate</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-12">
+                    <div class="hero-image">
+                        <img src="images/doc1.png" alt="#">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--/ End Single Slider -->
+</section>
+<!--/ End Main Banner Area -->
+
+
+    <section class="clients section">
+      <div class="container">
+          <div class="row">
+              <div class="col-12">
+                  <h1 class="text-center">How does it work?</h1>
+                    <p class="">This validation system utilises the Hedera Hasgraph blockchain to validate documents, allowing users to be sure that their file is the true, undoctored form of the document.</p>
+                    <p>Upon a document being uploaded, the system stores the document and generates a Hedera hash from it. It then uses Hedera APIs to anchor this hash on the blockchain. In the future, when the same file is uploaded to the validation section, the system generates a hash again, and checks if this same hash exists on the blockchain. 
+                      If so, the document is valid. If not, the file has either not been uploaded to the system before, or the document is invalid.</p>
+              </div>
+          </div>
+      </div>
+  </section>
+  <section class="clients section">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="text-center">FAQ</h1>
+        <h2 class="text-center mb-4">Frequently Asked Questions</h2>
+              
+        <div class="accordion w-100" id="basicAccordion">
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingOne">
+              <button class="accordion-button collapsed" type="button" data-mdb-toggle="collapse"
+                data-mdb-target="#basicAccordionCollapseOne" aria-expanded="false"
+                aria-controls="collapseOne">
+                How does Anchoring work on the Hedera Blockchain?
+              </button>
+            </h2>
+            <div id="basicAccordionCollapseOne" class="accordion-collapse collapse"
+              aria-labelledby="headingOne" data-mdb-parent="#basicAccordion" style="">
+              <div class="accordion-body">
+                Answer #1
+              </div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingTwo">
+              <button class="accordion-button collapsed" type="button" data-mdb-toggle="collapse"
+                data-mdb-target="#basicAccordionCollapseTwo" aria-expanded="false"
+                aria-controls="collapseTwo">
+                How can I trust that my files are handled with integrity?
+              </button>
+            </h2>
+            <div id="basicAccordionCollapseTwo" class="accordion-collapse collapse"
+              aria-labelledby="headingTwo" data-mdb-parent="#basicAccordion" style="">
+              <div class="accordion-body">
+                Answer #2
+              </div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingThree">
+              <button class="accordion-button collapsed" type="button" data-mdb-toggle="collapse"
+                data-mdb-target="#basicAccordionCollapseThree" aria-expanded="false"
+                aria-controls="collapseThree">
+                Who is apart of the awesome team behind such a technology?
+              </button>
+            </h2>
+            <div id="basicAccordionCollapseThree" class="accordion-collapse collapse"
+              aria-labelledby="headingThree" data-mdb-parent="#basicAccordion">
+              <div class="accordion-body">
+                Answer #3
+              </div>
+            </div>
+          </div>
+        </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+        <!-- HERE ENDS THE FAQ ABOVE, MAN THAT WAS A LOT OF STUFF, THANK GOD FOR BOOTSTRAP REFRENCE GUIDES-->
+
+
+<!-- HERE BEGINS: MODALS-->
+
+
+<!-- ANCHOR MODAL-->
+<!-- IDK WHY THIS BIT ISNT WORKING, THE BOOTSTRAP EXAMPLE CODE IS LITERALLY THE SAME -->
+<div class="modal fade" id="anchormod" tabindex="-1" aria-labelledby="anchormod" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="anchormod">Modal title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+    <!-- Footer -->
+    <footer class="p-5 bg-dark text-white text-center position-relative">
+      <div class="container">
+        <p class="lead">Copyright &copy; 2021 ANCHØR </p>
+
+        <a href="#" class="position-absolute bottom-0 end-0 p-5" style="text-decoration: none;">
+          <i class="bi bi-arrow-up-circle h1"></i>
+        </a>
+      </div>
+    </footer>
+
+
   <!-- Load React component. -->
+
   <script src="/react-scripts/react-app.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </body>
 
 </html>
