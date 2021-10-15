@@ -36,18 +36,26 @@ class ValidateForm extends React.Component
             })
             .then(res =>
             { /* If the response status is 200, render ValidateSuccess */
-                console.log(res.status);
-                if(res.status == '200')
+                console.log(res.data);
+                if(res.status === 200 && 'verifySuccess' in res.data)
                 {
-                    this.props.OnDisplayChange('validateSuccess');
+                    if(res.data.verifySuccess) 
+                    {
+                        this.props.OnDisplayChange('validateSuccess');
+                    }
+                    else
+                    {
+                        this.props.OnDisplayChange('validateFailure');
+                    }
+                }
+                else
+                {
+                    this.props.OnDisplayChange('ValidateError');
                 }
             })
-            .catch(error =>
-            { // If the response was outside of 2xx, render ValidateFailure
-                if(error.response)
-                {
-                    this.props.OnDisplayChange('validateFailure');
-                }
+            .catch(() =>
+            { // If the response was outside of 2xx, render ValidateError
+                this.props.OnDisplayChange('ValidateError');
             });
     }
     // Changes the selected file Id whenever a dropdown option is selected
@@ -388,6 +396,36 @@ class ValidateFailure extends React.Component
     }
 }
 ValidateFailure.propTypes =
+{
+    // eslint-disable-next-line no-undef
+    OnDisplayChange: PropTypes.func,
+};
+
+{/* Renders on page if uploaded document was succesfully validated */}
+// eslint-disable-next-line no-undef
+class ValidateError extends React.Component
+{
+    constructor(props)
+    {
+        super(props);
+        this.handleClick = this.HandleClick.bind(this);
+    }
+    HandleClick()
+    {
+        this.props.OnDisplayChange('anchorValidate');
+    }
+    render()
+    {
+        return (
+            <div className="ValidateError">
+                <h1>Validation Error</h1>
+                <p>There was an error validating your document</p>
+                <button onClick={this.handleClick}>Return to Homepage</button>
+            </div>
+        );
+    }
+}
+ValidateError.propTypes =
 {
     // eslint-disable-next-line no-undef
     OnDisplayChange: PropTypes.func,
