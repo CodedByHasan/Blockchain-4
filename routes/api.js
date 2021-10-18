@@ -64,4 +64,28 @@ router.put('/verify/', upload.any(), async function (req, res)
 
 });
 
+/**
+ * Route for reuploading a document, and comparing it's fingerprint to the
+ * fingerprint of the matching document on the blockchain
+ */
+router.delete('/delete/', async function (req, res) 
+{   
+    //Find the document in the datastore
+    let documentID = await anchor.deleteDocument(req.body.id);
+    let count = documentID.deletedCount
+    
+    try
+    {
+        if ( count == 1 )
+        {
+            response.send(200)
+        }
+    }
+    catch (error) 
+    {
+        response.status(500).send(error)
+    }
+
+});
+
 module.exports = router;

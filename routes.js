@@ -5,7 +5,7 @@
 const express = require('express');
 const documentModel = require('./models');
 const app = express();
-
+const ObjectID = require('mongodb').ObjectID
 
 
 //A route to add a new document to the database
@@ -98,6 +98,24 @@ app.get('/search', async (request, response) =>
     }
 });
 
+app.delete('/delete', async (request, response) => 
+{
+    //Search database
+    const document = await documentModel.deleteOne({ _id: ObjectID(request.body.id) })
+    let count = document.deletedCount
+    
+    try
+    {
+        if ( count == 1 )
+        {
+            response.send(200)
+        }
+    }
+    catch (error) 
+    {
+        response.status(500).send(error)
+    }
+})
 
 //Export these endpoints:
 module.exports = app;

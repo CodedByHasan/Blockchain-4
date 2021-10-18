@@ -4,7 +4,7 @@ const crypto = require('crypto');
 const { Client, Hbar, TopicCreateTransaction, TopicMessageSubmitTransaction, TopicMessageQuery, TopicId} = require('@hashgraph/sdk');
 const mongoose = require('mongoose');
 const documentModel = require('./models');
-
+const ObjectID = require('mongodb').ObjectID
 
 //Retrieving configuration info from .env file
 const myAccountId = process.env.MY_ACCOUNT_ID;
@@ -114,6 +114,20 @@ async function findDocument(id)
         debug('Error retreiving document:', id);
         return null;
     }
+}
+
+/**
+ * Delete user document using _id
+ * @param {string} id: The ID of the document to be deleted
+ * @returns deletedCount which is then number of deleted document
+ *          1 if successful
+ *          0 if unsuccessful
+ */
+async function deleteDocument(id) 
+{
+    //Search database
+    const document = await documentModel.deleteOne({ _id: ObjectID(id) })
+    return document
 }
 
 /**
