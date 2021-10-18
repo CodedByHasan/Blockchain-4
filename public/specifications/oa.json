@@ -3,11 +3,12 @@
     "info": {
         "title": "Blockchain-4",
         "description": "Document Anchoring using Blockchain",
-        "version": "1.0.6"
+        "version": "1.1.0"
     },
     "servers": [
         {
-            "url": "/api"
+            "url": "/api",
+            "description": "Relative Development Server"
         }
     ],
     "tags": [
@@ -17,7 +18,11 @@
         },
         {
             "name": "Anchoring Operations",
-            "description": "Provide methods for anchoring and verifing documents"
+            "description": "Provides methods for anchoring and verifing documents"
+        },
+        {
+            "name": "Administrative Operations",
+            "description": "Provides methods for administrating the application's database"
         }
     ],
     "paths": {
@@ -233,6 +238,47 @@
                                 }
                             }
                         }
+                    },
+                    "404": {
+                        "description": "The specified document could not be found"
+                    }
+                }
+            }
+        },
+        "/delete": {
+            "delete": {
+                "summary": "Delete an anchored document from the database",
+                "description": "Used to delete a document from the local database. Blockchain will remain unaltered",
+                "tags": ["Administrative Operations"],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "id": {
+                                        "type": "string"
+                                    }
+                                },
+                                "required": [
+                                    "id"
+                                ]
+                            },
+                            "examples": {
+                                "deleting": {
+                                    "summary": "Deleting Document",
+                                    "value": {
+                                        "id": "ac0b17dac471725dcd03e16c895cb27c0ccfbf9bc0cc58a14c857c662532e6a6"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "Document was deleted successfully"
                     },
                     "404": {
                         "description": "The specified document could not be found"

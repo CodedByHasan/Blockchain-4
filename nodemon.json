@@ -1,6 +1,7 @@
 {
     "ignore": [
-        "**/public/**"
+        "**/public/**",
+        "**/src/**"
     ],
     "watch": [
         ".",
