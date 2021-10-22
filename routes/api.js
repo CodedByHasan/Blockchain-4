@@ -78,8 +78,8 @@ router.delete('/delete/', async function (req, res)
     }
 
     //Find the document in the datastore
-    let documentID = await anchor.deleteDocument(req.body.id);
-    let count = documentID.deletedCount;
+    let count = await anchor.deleteDocument(req.body.id);
+    count = count.deletedCount;
     debug('count', count);
     if ( count == 1 )
     {

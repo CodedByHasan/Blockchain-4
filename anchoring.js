@@ -120,16 +120,16 @@ async function findDocument(id)
 
 /**
  * Delete user document using _id
- * @param {string} id: The ID of the document to be deleted
- * @returns deletedCount which is then number of deleted document
- *          1 if successful
- *          0 if unsuccessful
+ * @param {string} id The ID of the document to be deleted
+ * @returns The number of deleted documents
+ *          1 is successful
+ *          0 is unsuccessful
  */
 async function deleteDocument(id) 
 {
     //Search database
     const document = await documentModel.deleteOne({ _id: id });
-    return document;
+    return document.deletedCount;
 }
 
 /**
