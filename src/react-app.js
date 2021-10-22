@@ -221,7 +221,7 @@ AnchorForm.propTypes =
 {
     // eslint-disable-next-line no-undef
     OnDisplayChange: PropTypes.func,
-     // eslint-disable-next-line no-undef
+    // eslint-disable-next-line no-undef
     OnAnchorSuccess: PropTypes.func,
 };
 
@@ -260,6 +260,7 @@ AnchorSuccess.propTypes =
 {
     // eslint-disable-next-line no-undef
     OnDisplayChange: PropTypes.func,
+    // eslint-disable-next-line no-undef
     anchoredDocId: PropTypes.string,
 };
 
