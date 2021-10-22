@@ -1,6 +1,5 @@
 const debug = require('debug')('blockchain-4:anchoring');
 const crypto = require('crypto');
-//const { Client, PrivateKey, AccountCreateTransaction, AccountBalanceQuery, Hbar, TransferTransaction, FileContentsQuery, FileId, TopicCreateTransaction, TopicMessageSubmitTransaction, getMessage, TopicMessageQuery, TopicId, getAdminKey, getSubmitKey, transaction} = require('@hashgraph/sdk');
 const { Client, Hbar, TopicCreateTransaction, TopicMessageSubmitTransaction, TopicMessageQuery, TopicId} = require('@hashgraph/sdk');
 const mongoose = require('mongoose');
 const documentModel = require('./models');
@@ -51,9 +50,9 @@ async function getAllDocuments()
  */
 async function saveDocument(hash, name) 
 {
-    //Submit hash to Hedra
-    const topicId = await submitDocumentHedra(hash, name);
-    debug(`Hash ${hash} sent to Hedra, topicID ${topicId}`);
+    //Submit hash to Hedera
+    const topicId = await submitDocumentHedera(hash, name);
+    debug(`Hash ${hash} sent to Hedera, topicID ${topicId}`);
     //Add the document to the datastore
     let document = new  documentModel({
         topicId:topicId, 
@@ -72,7 +71,7 @@ async function saveDocument(hash, name)
  * @param {string} hash The hash to be submitted, name of document
  * @returns The topicID of the transaction
  */
-async function submitDocumentHedra(hash, name)
+async function submitDocumentHedera(hash, name)
 {
     //Create the transaction
     const transaction =  new TopicCreateTransaction().setTopicMemo(name);
@@ -103,9 +102,9 @@ async function findDocument(id)
     {
         const document = await documentModel.findOne({_id: id}, {topicId: 1});
     
-        debug(`Document Found: ${id}, Hedra Topic ID: ${document.topicId}`);
+        debug(`Document Found: ${id}, Hedera Topic ID: ${document.topicId}`);
     
-        let retrievedHash = await retrieveHashHedra(document.topicId);
+        let retrievedHash = await retrieveHashHedera(document.topicId);
         debug('retrievedHash:', retrievedHash);
         return retrievedHash;
     }
@@ -121,13 +120,19 @@ async function findDocument(id)
  * @param {string} topic id of the document
  * @returns The topicID of the transaction
  */
-function retrieveHashHedra(topicId) 
+function retrieveHashHedera(topicId) 
 {   
     return new Promise((resolve, reject) =>
     {
         //created topic Id object with num passed into function
-        const topicNum = topicId.slice(4);
-        const newTopicId = new TopicId(0, 0, topicNum);
+        const topicIdFields = topicId.split(".",3);
+
+        //at the moment only shard 0 and realm 0 exists but in the future new realms and shards will be added to Hedera
+        const shardNum = topicIdFields[0];
+        const realmNum = topicIdFields[1];
+        const topicNum = topicIdFields[2];
+
+        const newTopicId = new TopicId(shardNum, realmNum, topicNum);
 
         //subscribes to hedera mirror node and returns first message in topic
         try 
