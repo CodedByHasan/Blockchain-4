@@ -1,10 +1,8 @@
 const debug = require('debug')('blockchain-4:anchoring');
 const crypto = require('crypto');
-//const { Client, PrivateKey, AccountCreateTransaction, AccountBalanceQuery, Hbar, TransferTransaction, FileContentsQuery, FileId, TopicCreateTransaction, TopicMessageSubmitTransaction, getMessage, TopicMessageQuery, TopicId, getAdminKey, getSubmitKey, transaction} = require('@hashgraph/sdk');
-const { Client, Hbar, TopicCreateTransaction, TopicMessageSubmitTransaction, TopicMessageQuery, TopicId} = require('@hashgraph/sdk');
+const {Client, Hbar, TopicCreateTransaction, TopicMessageSubmitTransaction, TopicMessageQuery, TopicId} = require('@hashgraph/sdk');
 const mongoose = require('mongoose');
 const documentModel = require('./models');
-// const ObjectID = require('mongodb').ObjectID;
 
 //Retrieving configuration info from .env file
 const myAccountId = process.env.MY_ACCOUNT_ID;
@@ -60,9 +58,9 @@ async function saveDocument(hash, name)
     debug(`Hash ${hash} sent to Hedra, topicID ${topicId}`);
     //Add the document to the datastore
     let document = new  documentModel({
-        topicId:topicId, 
+        topicId: topicId, 
         documentName: name, 
-        timeStamp:Date.now(), 
+        timeStamp: Date.now(), 
         documentHash: hash}
     );
     await document.save();	//Mongo query
@@ -167,7 +165,6 @@ function retrieveHashHedra(topicId)
         {
             reject(error);
         }
-        
     });
 }
 

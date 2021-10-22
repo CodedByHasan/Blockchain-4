@@ -66,8 +66,8 @@ router.put('/verify/', upload.any(), async function (req, res)
 });
 
 /**
- * Route for reuploading a document, and comparing it's fingerprint to the
- * fingerprint of the matching document on the blockchain
+ * Route for deleting an anchored document, and comparing it's fingerprint to the
+ * The blockchain will remain unchanged
  */
 router.delete('/delete/', async function (req, res) 
 {   
@@ -89,7 +89,6 @@ router.delete('/delete/', async function (req, res)
     {
         res.sendStatus(404);
     }
-
 });
 
 module.exports = router;
