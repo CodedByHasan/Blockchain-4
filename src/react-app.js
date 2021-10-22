@@ -88,30 +88,31 @@ class ValidateForm extends React.Component
             // eslint-disable-next-line no-undef
             axios.get('/api/list')
             // Then map the documents into option elements for a dropdown menu
-            .then(res =>
-            {
-                const documentJSON = res.data;
-                this.setState({documentDropDown: documentJSON.map((e, key) =>
+                .then(res =>
                 {
-                    return (
-                        <option key={key} value={e._id}>[{e._id}]
-                        {e.documentName}</option>
-                    );
-                }
-                )});
-                /* Update the dropdown menu to display the name of the file
-                with its id number */
-                if (res.data.length > 0)
+                    const documentJSON = res.data;
+                    this.setState({documentDropDown: documentJSON.map((e, key) =>
+                    {
+                        return (
+                            <option key={key} value={e._id}>[{e._id}]
+                                {e.documentName}</option>
+                        );
+                    }
+                    )});
+                    /* Update the dropdown menu to display the name of the file
+                    with its id number */
+                    if (res.data.length > 0)
+                    {
+                        this.setState({fileId: res.data[0].id});
+                    }
+                })
+                .catch(error =>
                 {
-                    this.setState({fileId: res.data[0].id});
-                }
-            })
-            .catch(error =>
-            {
-                // If request to route was unsuccesfull, output an error
-                console.error
-                ('There was an error getting the list of documents\n', error);
-            });
+                    // If request to route was unsuccesfull, output an error
+                    console.error(
+                        'There was an error getting the list of documents\n',
+                        error);
+                });
         }
     }
 
@@ -243,7 +244,7 @@ class AnchorSuccess extends React.Component
                     future attempts to validate this file will be successful.
                 </p>
                 <button onClick={this.handleClick}
-                className="btn btn-outline-info" >Anchor Another Document
+                    className="btn btn-outline-info" >Anchor Another Document
                 </button>
             </div>
         );
@@ -280,7 +281,7 @@ class AnchorFailure extends React.Component
                     contact your system administrator.
                 </p>
                 <button onClick={this.handleClick}
-                className="btn btn-outline-info" >Try Again</button>
+                    className="btn btn-outline-info" >Try Again</button>
             </div>
         );
     }
@@ -311,7 +312,7 @@ class ValidateSuccess extends React.Component
                 <h6>Validation Successful</h6>
                 <p>Your document is valid</p>
                 <button onClick={this.handleClick}
-                className="btn btn-outline-info" >Validate Another Document
+                    className="btn btn-outline-info" >Validate Another Document
                 </button>
             </div>
         );
@@ -347,7 +348,7 @@ class ValidateFailure extends React.Component
                     system, or may be a doctored form of the true document.
                 </p>
                 <button onClick={this.handleClick}
-                className="btn btn-outline-info" >Try Again</button>
+                    className="btn btn-outline-info" >Try Again</button>
             </div>
         );
     }
@@ -378,7 +379,8 @@ class ValidateError extends React.Component
                 <h6>Validation Error</h6>
                 <p>There was an error validating your document</p>
                 <button onClick={this.handleClick}
-                className="btn btn-outline-info" >Return to Homepage</button>
+                    className="btn btn-outline-info" >Return to Homepage
+                </button>
             </div>
         );
     }
@@ -481,7 +483,7 @@ class ValidateWrapper extends React.Component
                 <div>
                     <ValidateError OnDisplayChange={this.handleDisplayChange} />
                 </div>
-            )
+            );
             //  Default state is render ValidateForm
         default:
             return (
@@ -495,6 +497,7 @@ class ValidateWrapper extends React.Component
 
 /* Updates the list of anchored documents in the ValidateForm component
 whenever a user clicks the Validate button on index.js */
+// eslint-disable-next-line
 function ReRenderValidate()
 {
     reRenderValidate = true;
