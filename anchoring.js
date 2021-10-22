@@ -128,9 +128,9 @@ function retrieveHashHedera(topicId)
         const topicIdFields = topicId.split(".",3);
 
         //at the moment only shard 0 and realm 0 exists but in the future new realms and shards will be added to Hedera
-        const shardNum = topicIdFields[0];
-        const realmNum = topicIdFields[1];
-        const topicNum = topicIdFields[2];
+        const shardNum = Number(topicIdFields[0]);
+        const realmNum = Number(topicIdFields[1]);
+        const topicNum = Number(topicIdFields[2]);
 
         const newTopicId = new TopicId(shardNum, realmNum, topicNum);
 
