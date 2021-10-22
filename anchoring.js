@@ -11,10 +11,14 @@ const myAccountId = process.env.MY_ACCOUNT_ID;
 const myPrivateKey = process.env.MY_PRIVATE_KEY;
 const mongoAddr = process.env.MONGO_DB_ADDR;
 
-//Check required variables exist
-if (myAccountId == null || myPrivateKey == null || mongoAddr == null ) 
+//Check required enviroment variables exist
+let errorString = '';
+errorString += myAccountId === undefined ? 'MY_ACCOUNT_ID ' : '';
+errorString += myPrivateKey === undefined ? 'MY_PRIVATE_KEY ' : '';
+errorString += mongoAddr === undefined ? 'MONGO_DB_ADDR ' : '';
+if (errorString)
 {
-    throw new Error('Environment variables MY_ACCOUNT_ID, MY_PRIVATE_KEY and MONGO_DB_ADDR must be present');
+    throw new Error(`Environment variable(s) ${errorString}must be present`);
 }
 
 //Establish Hedera client
