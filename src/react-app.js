@@ -221,6 +221,8 @@ AnchorForm.propTypes =
 {
     // eslint-disable-next-line no-undef
     OnDisplayChange: PropTypes.func,
+     // eslint-disable-next-line no-undef
+    OnAnchorSuccess: PropTypes.func,
 };
 
 // Renders on page if an uploaded document was succesfully anchored
@@ -258,6 +260,7 @@ AnchorSuccess.propTypes =
 {
     // eslint-disable-next-line no-undef
     OnDisplayChange: PropTypes.func,
+    anchoredDocId: PropTypes.string,
 };
 
 // Renders on page if an uploaded document could not be anchored
