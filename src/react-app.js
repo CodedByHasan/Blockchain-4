@@ -1,8 +1,9 @@
 'use strict';
-
+/* Global variable used to keep track of whether the ValidateForm component
+needs updating */
 let reRenderValidate = true;
 
-{/* Form for uploading documents to be validated */}
+// Form for uploading documents to be validated
 // eslint-disable-next-line no-undef
 class ValidateForm extends React.Component
 {
@@ -35,26 +36,30 @@ class ValidateForm extends React.Component
                 }
             })
             .then(res =>
-            { /* If the response status is 200, render ValidateSuccess */
-                console.log(res.data);
+            { // If the response status is 200
                 if(res.status === 200 && 'verifySuccess' in res.data)
                 {
+                    /* And the document is verified succesfully,
+                    render validateSuccess */
                     if(res.data.verifySuccess)
                     {
                         this.props.OnDisplayChange('validateSuccess');
                     }
+                    /* If the document could not be verified,
+                    render validateFailure */
                     else
                     {
                         this.props.OnDisplayChange('validateFailure');
                     }
                 }
+                // If the response was not 200, render validateError
                 else
                 {
                     this.props.OnDisplayChange('validateError');
                 }
             })
             .catch(() =>
-            { // If the response was outside of 2xx, render ValidateError
+            { // Any other error encountered will render validateError
                 this.props.OnDisplayChange('validateError');
             });
     }
@@ -66,69 +71,51 @@ class ValidateForm extends React.Component
     // Runs on component load to get the list of currently anchored documents
     componentDidMount()
     {
-        // Make a get request to get the list of documents that are anchored
-        if(reRenderValidate == true)
-        {
-            //console.log('did mount');
-            // eslint-disable-next-line no-undef
-            axios.get('/api/list')
-            // Then map the documents into option elements for a dropdown menu
-            .then(res =>
-            {
-                reRenderValidate = false;
-                const documentJSON = res.data;
-                this.setState({documentDropDown: documentJSON.map((e, key) =>
-                {
-                    return (
-                        <option key={key} value={e._id}>[{e._id}] {e.documentName}</option>
-                    );
-                }
-                )});
-                if (res.data.length > 0)
-                {
-                    this.setState({fileId: res.data[0].id});
-                }
-            })
-            .catch(error =>
-            {
-                //Do Something
-                console.error('There was an error getting the list of documents\n', error);
-            });
-        }
+        this.GetUpdatedList();
     }
-    // Temp fix to get new list data
+    // Runs on component update to get the list of currently anchored documents
     componentDidUpdate()
+    {
+        this.GetUpdatedList();
+    }
+    // Gets the updated list of documents
+    GetUpdatedList()
     {
         // Make a get request to get the list of documents that are anchored
         if (reRenderValidate == true)
         {
-            //console.log("did update");
             reRenderValidate = false;
             // eslint-disable-next-line no-undef
             axios.get('/api/list')
             // Then map the documents into option elements for a dropdown menu
-            .then(res =>
-            {
-                const documentJSON = res.data;
-                this.setState({documentDropDown: documentJSON.map((e, key) =>
+                .then(res =>
                 {
-                    return (
-                        <option key={key} value={e._id}>[{e._id}] {e.documentName}</option>
-                    );
-                }
-                )});
-                if (res.data.length > 0)
+                    const documentJSON = res.data;
+                    this.setState({documentDropDown: documentJSON.map((e, key) =>
+                    {
+                        return (
+                            <option key={key} value={e._id}>[{e._id}]
+                                {e.documentName}</option>
+                        );
+                    }
+                    )});
+                    /* Update the dropdown menu to display the name of the file
+                    with its id number */
+                    if (res.data.length > 0)
+                    {
+                        this.setState({fileId: res.data[0].id});
+                    }
+                })
+                .catch(error =>
                 {
-                    this.setState({fileId: res.data[0].id});
-                }
-            })
-            .catch(error =>
-            {
-                //Do Something
-                console.error('There was an error getting the list of documents\n', error);
-            });
+                    // If request to route was unsuccesfull, output an error
+                    console.error(
+                        'There was an error getting the list of documents\n',
+                        error);
+                });
         }
     }
+
     render()
     {
         return (
@@ -154,7 +141,7 @@ ValidateForm.propTypes =
     OnDisplayChange: PropTypes.func,
 };
 
-{/* Form for uploading documents to be anchored */}
+// Form for uploading documents to be anchored
 // eslint-disable-next-line no-undef
 class AnchorForm extends React.Component
 {
@@ -176,15 +163,13 @@ class AnchorForm extends React.Component
         this.setState({fileName: event.target.value});
     }
 
-    /* When form is submitted, this function runs to alert the user
-    that they have uploaded a file, and sends the file to the server with an
-    axios request*/
+    /* When form is submitted, this function sends the file to the server with
+    an axios request*/
     HandleSubmit(event)
     {
         event.preventDefault();
         this.setState({uploadedFile: this.fileInput.current.files[0]});
-        console.log(this.fileInput.current.files[0]);
-        // Upload the file and then log the return status and change display
+        // Upload the file and change display
         const form = new FormData();
         form.append('name', this.state.fileName);
         form.append('file', this.fileInput.current.files[0]);
@@ -236,41 +221,7 @@ AnchorForm.propTypes =
     OnDisplayChange: PropTypes.func,
 };
 
-{/* Default rendered component, allows a user to upload a document either for
-validation against an existing anchored document, or to anchor new document */}
-// eslint-disable-next-line no-undef
-class AnchorValidate  extends React.Component
-{
-    render()
-    {
-        return (
-            <div>
-                <div className="anchor">
-                    <h1>Anchor</h1>
-                    {/* Placeholder text */}
-                    <p>Upload a document here and enter a custom name for it. The
-                    document will be anchored on the blockchain for future validations.</p>
-                    <AnchorForm OnDisplayChange={this.props.OnDisplayChange} />
-                </div>
-
-                <div className="validate">
-                    <h1>Validate</h1>
-                    {/* Placeholder text */}
-                    <p>Upload a document here to validate it.</p>
-                    {/* Requires JS for upload functionality */}
-                    <ValidateForm OnDisplayChange={this.props.OnDisplayChange} />
-                </div>
-            </div>
-        );
-    }
-}
-AnchorValidate.propTypes =
-{
-    // eslint-disable-next-line no-undef
-    OnDisplayChange: PropTypes.func,
-};
-
-{/* Renders on page if an uploaded document was succesfully anchored */}
+// Renders on page if an uploaded document was succesfully anchored
 // eslint-disable-next-line no-undef
 class AnchorSuccess extends React.Component
 {
@@ -281,7 +232,7 @@ class AnchorSuccess extends React.Component
     }
     HandleClick()
     {
-        this.props.OnDisplayChange('anchorValidate');
+        this.props.OnDisplayChange('anchorForm');
     }
     render()
     {
@@ -289,10 +240,12 @@ class AnchorSuccess extends React.Component
             <div className="anchorSuccess">
                 <h6>Upload Successful</h6>
                 <p>
-                    Your document has been successfully uploaded, future attempts to
-                    validate this file will be successful.
+                    Your document has been successfully uploaded,
+                    future attempts to validate this file will be successful.
                 </p>
-                <button onClick={this.handleClick} className="btn btn-outline-info" >Anchor Another Document</button>
+                <button onClick={this.handleClick}
+                    className="btn btn-outline-info" >Anchor Another Document
+                </button>
             </div>
         );
     }
@@ -303,7 +256,7 @@ AnchorSuccess.propTypes =
     OnDisplayChange: PropTypes.func,
 };
 
-{/* Renders on page if an uploaded document could not be anchored */}
+// Renders on page if an uploaded document could not be anchored
 // eslint-disable-next-line no-undef
 class AnchorFailure extends React.Component
 {
@@ -314,7 +267,7 @@ class AnchorFailure extends React.Component
     }
     HandleClick()
     {
-        this.props.OnDisplayChange('anchorValidate');
+        this.props.OnDisplayChange('anchorForm');
     }
     render()
     {
@@ -322,11 +275,13 @@ class AnchorFailure extends React.Component
             <div className="anchorFailure">
                 <h6>Upload Failed</h6>
                 <p>
-                    Your document could not be uploaded, make sure that you attached a
-                    file and entered a name for it. If you still have problems,
+                    Your document could not be uploaded, make sure that you
+                    attached a file and entered a name for it.
+                    If you still have problems,
                     contact your system administrator.
                 </p>
-                <button onClick={this.handleClick} className="btn btn-outline-info" >Try Again</button>
+                <button onClick={this.handleClick}
+                    className="btn btn-outline-info" >Try Again</button>
             </div>
         );
     }
@@ -337,7 +292,7 @@ AnchorFailure.propTypes =
     OnDisplayChange: PropTypes.func,
 };
 
-{/* Renders on page if uploaded document was succesfully validated */}
+// Renders on page if uploaded document was succesfully validated
 // eslint-disable-next-line no-undef
 class ValidateSuccess extends React.Component
 {
@@ -348,7 +303,7 @@ class ValidateSuccess extends React.Component
     }
     HandleClick()
     {
-        this.props.OnDisplayChange('anchorValidate');
+        this.props.OnDisplayChange('validateForm');
     }
     render()
     {
@@ -356,7 +311,9 @@ class ValidateSuccess extends React.Component
             <div className="validateSuccess">
                 <h6>Validation Successful</h6>
                 <p>Your document is valid</p>
-                <button onClick={this.handleClick} className="btn btn-outline-info" >Validate Another Document</button>
+                <button onClick={this.handleClick}
+                    className="btn btn-outline-info" >Validate Another Document
+                </button>
             </div>
         );
     }
@@ -367,7 +324,7 @@ ValidateSuccess.propTypes =
     OnDisplayChange: PropTypes.func,
 };
 
-{/* Renders on page if the uploaded document could not be validated */}
+// Renders on page if the uploaded document could not be validated
 // eslint-disable-next-line no-undef
 class ValidateFailure extends React.Component
 {
@@ -378,7 +335,7 @@ class ValidateFailure extends React.Component
     }
     HandleClick()
     {
-        this.props.OnDisplayChange('anchorValidate');
+        this.props.OnDisplayChange('validateForm');
     }
     render()
     {
@@ -386,11 +343,12 @@ class ValidateFailure extends React.Component
             <div className="validateFailure">
                 <h6>Document is Invalid</h6>
                 <p>
-                    Sorry, we couldn&apos;t validate your document. Your file may never have
-                    been uploaded to the validation system, or may be a doctored form of
-                    the true document
+                    Sorry, we couldn&apos;t validate your document.
+                    Your file may never have been uploaded to the validation
+                    system, or may be a doctored form of the true document.
                 </p>
-                <button onClick={this.handleClick} className="btn btn-outline-info" >Try Again</button>
+                <button onClick={this.handleClick}
+                    className="btn btn-outline-info" >Try Again</button>
             </div>
         );
     }
@@ -401,7 +359,7 @@ ValidateFailure.propTypes =
     OnDisplayChange: PropTypes.func,
 };
 
-{/* Renders on page if uploaded document was succesfully validated */}
+// Renders on page if response from route was not 200
 // eslint-disable-next-line no-undef
 class ValidateError extends React.Component
 {
@@ -412,7 +370,7 @@ class ValidateError extends React.Component
     }
     HandleClick()
     {
-        this.props.OnDisplayChange('anchorValidate');
+        this.props.OnDisplayChange('validateForm');
     }
     render()
     {
@@ -420,7 +378,9 @@ class ValidateError extends React.Component
             <div className="validateError">
                 <h6>Validation Error</h6>
                 <p>There was an error validating your document</p>
-                <button onClick={this.handleClick} className="btn btn-outline-info" >Return to Homepage</button>
+                <button onClick={this.handleClick}
+                    className="btn btn-outline-info" >Return to Homepage
+                </button>
             </div>
         );
     }
@@ -431,35 +391,7 @@ ValidateError.propTypes =
     OnDisplayChange: PropTypes.func,
 };
 
-{/* A component which explains how the document anchoring system works */}
-// eslint-disable-next-line no-undef
-class TechnologyExplanation extends React.Component
-{
-    render()
-    {
-        return (
-            <div className="technologyExplanation">
-                <h1>How it works</h1>
-                <p>
-                    This validation system utilises the Hedera Hasgraph blockchain to
-                    validate documents, allowing users to be sure that their file is the
-                    true, undoctored form of the document.
-                </p>
-                <p>
-                    Upon a document being uploaded, the system stores the document and
-                    generates a [Hash technology] hash from it. It then uses Hedera
-                    APIs to anchor this hash on the blockchain. In the future, when the same
-                    file is uploaded to the validation section, the system generates a
-                    hash again, and checks if this same hash exists on the blockchain. If
-                    so, the document is valid. If not, the file has either not been
-                    uploaded to the system before, or the document is invalid.
-                </p>
-            </div>
-        );
-    }
-}
-
-{/* Main component which renders the correct sub-component based on its state */}
+// Parent Anchor component which renders an anchor form or success/fail states
 // eslint-disable-next-line no-undef
 class AnchorWrapper extends React.Component
 {
@@ -468,12 +400,12 @@ class AnchorWrapper extends React.Component
         super(props);
         this.state =
         {
-            display: 'anchorValidate',
+            display: 'anchorForm',
         };
         this.handleDisplayChange = this.handleDisplayChange.bind(this);
     }
 
-    /* Called by sub-components. Changes the sub-component rendered by Main,
+    /* Called by sub-components. Changes the sub-component rendered by this,
     depending on the result of certain user actions */
     handleDisplayChange(toBeDisplayed)
     {
@@ -497,7 +429,7 @@ class AnchorWrapper extends React.Component
                     <AnchorFailure OnDisplayChange={this.handleDisplayChange} />
                 </div>
             );
-            //  Default state is displaying a validate and anchor div side by side
+            // Default state is rendering AnchorForm
         default:
             return (
                 <div>
@@ -508,7 +440,7 @@ class AnchorWrapper extends React.Component
     }
 }
 
-{/* Main component which renders the correct sub-component based on its state */}
+// Parent component which renders a validation form or success/failure states
 // eslint-disable-next-line no-undef
 class ValidateWrapper extends React.Component
 {
@@ -517,12 +449,12 @@ class ValidateWrapper extends React.Component
         super(props);
         this.state =
         {
-            display: 'anchorValidate',
+            display: 'validateForm',
         };
         this.handleDisplayChange = this.handleDisplayChange.bind(this);
     }
 
-    /* Called by sub-components. Changes the sub-component rendered by Main,
+    /* Called by sub-components. Changes the sub-component rendered by this,
     depending on the result of certain user actions */
     handleDisplayChange(toBeDisplayed)
     {
@@ -551,8 +483,8 @@ class ValidateWrapper extends React.Component
                 <div>
                     <ValidateError OnDisplayChange={this.handleDisplayChange} />
                 </div>
-            )
-            //  Default state is displaying a validate and anchor div side by side
+            );
+            //  Default state is render ValidateForm
         default:
             return (
                 <div>
@@ -563,9 +495,11 @@ class ValidateWrapper extends React.Component
     }
 }
 
+/* Updates the list of anchored documents in the ValidateForm component
+whenever a user clicks the Validate button on index.js */
+// eslint-disable-next-line
 function ReRenderValidate()
 {
-    //console.log("Rerender set to true");
     reRenderValidate = true;
     let validateContainer = document.querySelector('#validatemodbody');
     // eslint-disable-next-line no-undef
