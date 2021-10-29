@@ -186,6 +186,8 @@ class AnchorForm extends React.Component
                 console.log(res.status);
                 if(res.status == '200')
                 {
+                    console.log(res.data.id);
+                    this.props.OnAnchorSuccess(res.data.id);
                     this.props.OnDisplayChange('anchorSuccess');
                 }
             })
@@ -219,6 +221,8 @@ AnchorForm.propTypes =
 {
     // eslint-disable-next-line no-undef
     OnDisplayChange: PropTypes.func,
+    // eslint-disable-next-line no-undef
+    OnAnchorSuccess: PropTypes.func,
 };
 
 // Renders on page if an uploaded document was succesfully anchored
@@ -236,12 +240,14 @@ class AnchorSuccess extends React.Component
     }
     render()
     {
+        console.log(this.props.anchoredDocId);
         return (
             <div className="anchorSuccess">
                 <h6>Upload Successful</h6>
                 <p>
-                    Your document has been successfully uploaded,
-                    future attempts to validate this file will be successful.
+                    Your document has been successfully uploaded
+                    with id {this.props.anchoredDocId}.
+                    Future attempts to validate this file will be successful.
                 </p>
                 <button onClick={this.handleClick}
                     className="btn btn-outline-info" >Anchor Another Document
@@ -254,6 +260,8 @@ AnchorSuccess.propTypes =
 {
     // eslint-disable-next-line no-undef
     OnDisplayChange: PropTypes.func,
+    // eslint-disable-next-line no-undef
+    anchoredDocId: PropTypes.string,
 };
 
 // Renders on page if an uploaded document could not be anchored
@@ -401,15 +409,24 @@ class AnchorWrapper extends React.Component
         this.state =
         {
             display: 'anchorForm',
+            anchoredDocId: '',
         };
-        this.handleDisplayChange = this.handleDisplayChange.bind(this);
+        this.handleDisplayChange = this.HandleDisplayChange.bind(this);
+        this.handleAnchorSuccess = this.HandleAnchorSuccess.bind(this);
     }
 
     /* Called by sub-components. Changes the sub-component rendered by this,
     depending on the result of certain user actions */
-    handleDisplayChange(toBeDisplayed)
+    HandleDisplayChange(toBeDisplayed)
     {
         this.setState({display: toBeDisplayed});
+    }
+
+    HandleAnchorSuccess(anchoredId)
+    {
+        console.log(anchoredId);
+        this.setState({anchoredDocId: anchoredId});
+        console.log(this.state.anchoredDocId);
     }
 
     render()
@@ -420,7 +437,9 @@ class AnchorWrapper extends React.Component
         case 'anchorSuccess':
             return (
                 <div>
-                    <AnchorSuccess OnDisplayChange={this.handleDisplayChange} />
+                    <AnchorSuccess OnDisplayChange={this.handleDisplayChange}
+                        anchoredDocId={this.state.anchoredDocId}
+                    />
                 </div>
             );
         case 'anchorFailure':
@@ -433,7 +452,9 @@ class AnchorWrapper extends React.Component
         default:
             return (
                 <div>
-                    <AnchorForm OnDisplayChange={this.handleDisplayChange} />
+                    <AnchorForm OnDisplayChange={this.handleDisplayChange}
+                        OnAnchorSuccess={this.handleAnchorSuccess}
+                    />
                 </div>
             );
         }
