@@ -1,10 +1,11 @@
-var express = require('express');
+const debug = require('debug')('blockchain-4:api');
+const express = require('express');
 const multer  = require('multer');
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 const anchor = require('../anchoring');
 
-var router = express.Router();
+const router = express.Router();
 
 /**
  * Route for getting a list of all previously uploaded and anchored documents
@@ -62,6 +63,32 @@ router.put('/verify/', upload.any(), async function (req, res)
         storedHash: storedHash
     });
 
+});
+
+/**
+ * Route for deleting an anchored document, and comparing it's fingerprint to the
+ * The blockchain will remain unchanged
+ */
+router.delete('/delete/', async function (req, res) 
+{   
+    //Check for required parameters
+    if (!('id' in req.body) || req.body.id.length < 1) 
+    {
+        return res.sendStatus(400);
+    }
+
+    //Find the document in the datastore
+    let count = await anchor.deleteDocument(req.body.id);
+    count = count.deletedCount;
+    debug('count', count);
+    if ( count == 1 )
+    {
+        res.sendStatus(204);
+    }
+    else
+    {
+        res.sendStatus(404);
+    }
 });
 
 module.exports = router;

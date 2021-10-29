@@ -1,19 +1,22 @@
 const debug = require('debug')('blockchain-4:anchoring');
 const crypto = require('crypto');
-const { Client, Hbar, TopicCreateTransaction, TopicMessageSubmitTransaction, TopicMessageQuery, TopicId} = require('@hashgraph/sdk');
+const {Client, Hbar, TopicCreateTransaction, TopicMessageSubmitTransaction, TopicMessageQuery, TopicId} = require('@hashgraph/sdk');
 const mongoose = require('mongoose');
 const documentModel = require('./models');
-
 
 //Retrieving configuration info from .env file
 const myAccountId = process.env.MY_ACCOUNT_ID;
 const myPrivateKey = process.env.MY_PRIVATE_KEY;
 const mongoAddr = process.env.MONGO_DB_ADDR;
 
-//Check required variables exist
-if (myAccountId == null || myPrivateKey == null || mongoAddr == null )
+//Check required enviroment variables exist
+let errorString = '';
+errorString += myAccountId === undefined ? 'MY_ACCOUNT_ID ' : '';
+errorString += myPrivateKey === undefined ? 'MY_PRIVATE_KEY ' : '';
+errorString += mongoAddr === undefined ? 'MONGO_DB_ADDR ' : '';
+if (errorString)
 {
-    throw new Error('Environment variables MY_ACCOUNT_ID, MY_PRIVATE_KEY and MONGO_DB_ADDR must be present');
+    throw new Error(`Environment variable(s) ${errorString}must be present`);
 }
 
 //Establish Hedera client
@@ -55,9 +58,9 @@ async function saveDocument(hash, name)
     debug(`Hash ${hash} sent to Hedera, topicID ${topicId}`);
     //Add the document to the datastore
     let document = new  documentModel({
-        topicId:topicId,
+        topicId: topicId,
         documentName: name,
-        timeStamp:Date.now(),
+        timeStamp: Date.now(),
         documentHash: hash}
     );
     await document.save();	//Mongo query
@@ -116,6 +119,20 @@ async function findDocument(id)
 }
 
 /**
+ * Delete user document using _id
+ * @param {string} id The ID of the document to be deleted
+ * @returns The number of deleted documents
+ *          1 is successful
+ *          0 is unsuccessful
+ */
+async function deleteDocument(id) 
+{
+    //Search database
+    const document = await documentModel.deleteOne({ _id: id });
+    return document.deletedCount;
+}
+
+/**
  * retrieves the hash of a document from the blockchain
  * @param {string} topic id of the document
  * @returns The topicID of the transaction
@@ -154,7 +171,6 @@ function retrieveHashHedera(topicId)
         {
             reject(error);
         }
-
     });
 }
 
@@ -174,5 +190,6 @@ module.exports = {
     getAllDocuments: getAllDocuments,
     findDocument: findDocument,
     saveDocument: saveDocument,
-    hashFile: hashFile
+    hashFile: hashFile,
+    deleteDocument: deleteDocument
 };
